@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "258957657337",
+    "project_id": "witchershoes-34e05",
+    "storage_bucket": "witchershoes-34e05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258957657337:android:66c46174f6cba05a410e28",
+        "android_client_info": {
+          "package_name": "com.example.witchersshoes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAgZOcw4YIzaoXk_Dt3hxioU79S4F8mGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
