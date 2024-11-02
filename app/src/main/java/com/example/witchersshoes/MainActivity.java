@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                    if(documentSnapshot.exists()){
                        String name = documentSnapshot.getString("name");
                        String size = documentSnapshot.getString("size");
+                       // Liên kết với loại giày
                        DocumentReference typeRef = documentSnapshot.getDocumentReference("category");
 
                        txtNameShoes.setText(name);
