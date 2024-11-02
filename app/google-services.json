@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "258957657337",
-    "project_id": "witchershoes-34e05",
-    "storage_bucket": "witchershoes-34e05.appspot.com"
+    "project_number": "282834722292",
+    "firebase_url": "https://witcher-sshoes-default-rtdb.firebaseio.com",
+    "project_id": "witcher-sshoes",
+    "storage_bucket": "witcher-sshoes.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:258957657337:android:66c46174f6cba05a410e28",
+        "mobilesdk_app_id": "1:282834722292:android:beb7d3b75b41e43ab86da1",
         "android_client_info": {
           "package_name": "com.example.witchersshoes"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBAgZOcw4YIzaoXk_Dt3hxioU79S4F8mGM"
+          "current_key": "AIzaSyCBoFvE7FmSLNwBpG-QUgyQ8ZQmTs-WXvQ"
         }
       ],
       "services": {

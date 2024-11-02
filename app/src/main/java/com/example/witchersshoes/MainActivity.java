@@ -1,6 +1,7 @@
 package com.example.witchersshoes;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,15 +15,18 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.witchersshoes.classes.ToDo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseFirestore database;
-    TextView txtContent;
+    TextView txtNameShoes, txtSize, txtCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +34,13 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        txtContent = findViewById(R.id.content);
+        txtNameShoes = findViewById(R.id.shoesName);
+        txtSize = findViewById(R.id.size);
+        txtCategory = findViewById(R.id.category);
 
         // Khởi tạo FirebaseFirestore
         database = FirebaseFirestore.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         String id = UUID.randomUUID().toString();
         String title = "tieu de ne";
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "that bai", Toast.LENGTH_SHORT).show();
                     }
                 });
-
+/*
         //lay du lieu ve
         database.collection("ToDo")
                 .get()
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                             String title2 = toDo.getTitle();
                             String content2 = toDo.getContent();
 
+                            txtNameShoes.setText(title2);
                             // Hiển thị dữ liệu
                             Toast.makeText(MainActivity.this, "Title: " + title2 + ", Content: " + content2, Toast.LENGTH_SHORT).show();
                         }
@@ -81,6 +83,30 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Lỗi khi lấy dữ liệu", Toast.LENGTH_SHORT).show();
                     }
                 });
+*/
+        database.collection("Shoes").document("s1")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                   if(documentSnapshot.exists()){
+                       String name = documentSnapshot.getString("name");
+                       String size = documentSnapshot.getString("size");
+                       DocumentReference typeRef = documentSnapshot.getDocumentReference("category");
+
+                       txtNameShoes.setText(name);
+                       txtSize.setText(size);
+                       if(typeRef!=null){
+                           typeRef.get().addOnSuccessListener(typeSnapshot->{
+                               if(typeSnapshot.exists()){
+                                   String category = typeSnapshot.getString("name");
+                                   txtNameShoes.setText(name);
+                                   txtSize.setText(size);
+                                   txtCategory.setText(category);
+                               }
+                           });
+                       }
+                    }
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error getting shoe data", e));
 
     }
 }
