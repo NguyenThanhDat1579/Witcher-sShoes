@@ -36,9 +36,7 @@ public class MainActivity2 extends AppCompatActivity {
         // Thêm loại giày mới
         Map<String, Object> shoesTypes = new HashMap<>();
         shoesTypes.put("tenLoaiGiay", "Nam");
-        db.collection("loai_giay").add(shoesTypes)
-                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Shoe type added with ID: " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.w("Firestore", "Error adding shoe type", e));
+        db.collection("loai_giay").add(shoesTypes);
 
         // Tham chiếu đến một document trong collection giày
         DocumentReference typesRef = db.collection("loai_giay").document("l1");
