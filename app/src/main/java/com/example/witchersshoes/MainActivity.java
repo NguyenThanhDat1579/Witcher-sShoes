@@ -14,6 +14,7 @@ import com.example.witchersshoes.classes.ToDo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         ToDo toDo = new ToDo(id, title, content);
         HashMap<String, Object> map = toDo.convertHashMap();
-
+        //push du lieu len
         database.collection("ToDo").document(id)
                 .set(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -57,5 +58,25 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "that bai", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        //lay du lieu ve
+        database.collection("ToDo")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Chuyển dữ liệu thành một đối tượng ToDo hoặc xử lý tùy ý
+                            ToDo toDo2 = document.toObject(ToDo.class);
+                            String title2 = toDo.getTitle();
+                            String content2 = toDo.getContent();
+
+                            // Hiển thị dữ liệu
+                            Toast.makeText(MainActivity.this, "Title: " + title2 + ", Content: " + content2, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "Lỗi khi lấy dữ liệu", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 }
