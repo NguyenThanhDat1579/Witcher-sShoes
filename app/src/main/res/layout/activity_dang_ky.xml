@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:text="TextView" />
+        android:text="Nhập lại mật khẩu" />
 
     <EditText
         android:id="@+id/editTextText3"
