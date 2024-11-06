@@ -1,5 +1,6 @@
 package com.example.witchersshoes;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,7 @@ public class DangKy extends AppCompatActivity {
 
     FirebaseFirestore db;
     EditText edtUsername, edtPassword, edtRePassword;
-    Button btnRegister;
+    Button btnRegister, btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class DangKy extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         edtRePassword = findViewById(R.id.edtRePassword);
         btnRegister = findViewById(R.id.btnRegister);
+        btnLogin = findViewById(R.id.btnLogin);
 
         db = FirebaseFirestore.getInstance();
 
@@ -46,6 +48,14 @@ public class DangKy extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkRegister();
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DangKy.this, DangNhap.class);
+                startActivity(intent);
             }
         });
 
