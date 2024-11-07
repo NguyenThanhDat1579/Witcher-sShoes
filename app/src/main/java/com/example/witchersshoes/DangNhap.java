@@ -11,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DangNhap extends AppCompatActivity {
@@ -41,7 +42,7 @@ public class DangNhap extends AppCompatActivity {
         });
     }
     //Ham lay du lieu tu Firestore
-    private void dangNhap(String userID){
+    private void nguoiDung(String userID){
         db.collection("KhachHang").document(userID)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -61,7 +62,10 @@ public class DangNhap extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if(!queryDocumentSnapshots.isEmpty()){
-                        Toast.makeText(this, "Sucessfully", Toast.LENGTH_SHORT).show();
+                        for (DocumentSnapshot document : queryDocumentSnapshots) {
+                            String documentID = document.getId();
+                            Toast.makeText(this, "Login successful, Document ID: " + documentID, Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else{
                         Toast.makeText(this, "Dang nhap that bai", Toast.LENGTH_SHORT).show();
