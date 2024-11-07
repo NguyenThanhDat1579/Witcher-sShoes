@@ -1,6 +1,8 @@
 package com.example.witchersshoes;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,12 +13,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DangNhap extends AppCompatActivity {
     FirebaseFirestore db;
-    EditText edtUsername, edtPassword;
-    Button btnLogin;
+    TextInputEditText edtUsername, edtPassword;
+    Button btnLogin, btnRegister;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class DangNhap extends AppCompatActivity {
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        btnRegister = findViewById(R.id.btnRegister);
 
         db = FirebaseFirestore.getInstance();
 
@@ -37,6 +42,14 @@ public class DangNhap extends AppCompatActivity {
                 checkLogin(username, password);
             } else {
                 Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DangNhap.this, DangKy.class);
+                startActivity(intent);
             }
         });
     }
