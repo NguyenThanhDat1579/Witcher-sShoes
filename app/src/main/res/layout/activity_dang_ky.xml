@@ -86,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
-        android:backgroundTint=" "
+        app:backgroundTint="@null"
         android:textSize="20dp"
         android:text="Đăng ký" />
 </LinearLayout>
