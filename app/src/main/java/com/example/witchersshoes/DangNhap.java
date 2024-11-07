@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DangNhap extends AppCompatActivity {
@@ -74,7 +75,11 @@ public class DangNhap extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if(!queryDocumentSnapshots.isEmpty()){
-                        Toast.makeText(this, "Sucessfully", Toast.LENGTH_SHORT).show();
+                        for (DocumentSnapshot document : queryDocumentSnapshots) {
+                            String documentID = document.getId();
+                            Intent intent = new Intent(DangNhap.this, TrangChu.class);
+                            startActivity(intent);
+                        }
                     }
                     else{
                         Toast.makeText(this, "Dang nhap that bai", Toast.LENGTH_SHORT).show();
