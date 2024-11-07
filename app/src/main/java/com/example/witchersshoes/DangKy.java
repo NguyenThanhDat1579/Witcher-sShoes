@@ -85,8 +85,6 @@ public class DangKy extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(DangKy.this, "thanh cong", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(DangKy.this, DangNhap.class);
-                        startActivity(intent);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

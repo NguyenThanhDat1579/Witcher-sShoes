@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/button_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Màu nền của nút -->
+    <solid android:color="#000000"/>
+    <!-- Bo tròn góc nút -->
+    <corners android:radius="12dp"/> <!-- Độ bo góc -->
+    <padding android:left="16dp" android:right="16dp" android:top="8dp" android:bottom="8dp"/>
+</shape>
