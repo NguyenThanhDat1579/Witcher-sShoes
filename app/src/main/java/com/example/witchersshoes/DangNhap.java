@@ -74,7 +74,8 @@ public class DangNhap extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if(!queryDocumentSnapshots.isEmpty()){
-                        Toast.makeText(this, "Sucessfully", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(DangNhap.this, TrangChu.class);
+                        startActivity(intent);
                     }
                     else{
                         Toast.makeText(this, "Dang nhap that bai", Toast.LENGTH_SHORT).show();
