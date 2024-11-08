@@ -14,16 +14,16 @@
         android:theme="@style/Theme.WitchersShoes"
         tools:targetApi="31">
         <activity
-            android:name=".Category1"
+            android:name=".Activity.Category1"
             android:exported="false" />
         <activity
-            android:name=".DangKy"
+            android:name=".Activity.DangKy"
             android:exported="false" />
         <activity
-            android:name=".DangNhap"
+            android:name=".Activity.DangNhap"
             android:exported="false" />
         <activity
-            android:name=".TrangChu"
+            android:name=".Activity.TrangChuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

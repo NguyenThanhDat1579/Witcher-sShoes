@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="15dp"
     android:fontFamily="sans-serif-light"
-    tools:context=".DangKy">
+    tools:context=".Activity.DangKy">
 
     <TextView
         android:id="@+id/textView"
