@@ -1,12 +1,12 @@
 package com.example.witchersshoes.classes;
 
 
-public class Category1 {
+public class ProductCategory1 {
     private String name;
     private int price;
     private int imageResId;
 
-    public Category1(String name, int price, int imageResId) {
+    public ProductCategory1(String name, int price, int imageResId) {
         this.name = name;
         this.price = price;
         this.imageResId = imageResId;
