@@ -7,6 +7,12 @@
     android:orientation="vertical"
     android:id="@+id/btnCategories">
 
+    <TextView
+        android:id="@+id/txtIDCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="id"/>
+
     <ImageView
         android:id="@+id/picCat"
         android:layout_width="66dp"

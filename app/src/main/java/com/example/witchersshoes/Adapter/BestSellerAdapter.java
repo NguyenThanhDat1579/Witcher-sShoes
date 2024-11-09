@@ -41,6 +41,7 @@ public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.Vi
         holder.binding.titleTxt.setText(item.getTitle());
         holder.binding.priceTxt.setText(item.getPrice()+".000đ");
         holder.binding.ratingTxt.setText(String.valueOf(item.getRating()));
+        holder.binding.txtID.setText(String.valueOf(item.getID()));
 
         Glide.with(context)
                 .load(item.getPicUrl().get(0))
