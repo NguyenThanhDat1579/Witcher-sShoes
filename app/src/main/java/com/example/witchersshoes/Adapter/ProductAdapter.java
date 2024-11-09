@@ -62,6 +62,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.addToCartButton.setOnClickListener(v -> {
             // Xử lý sự kiện khi nhấn nút "Thêm vào giỏ hàng"
         });
+
     }
 
     @Override

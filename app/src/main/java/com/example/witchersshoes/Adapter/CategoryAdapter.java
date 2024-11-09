@@ -1,13 +1,16 @@
 package com.example.witchersshoes.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.witchersshoes.Activity.Category1;
 import com.example.witchersshoes.Model.CategoryModel;
 import com.example.witchersshoes.databinding.ViewholderCategoryBinding;
 
@@ -38,6 +41,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         Glide.with(holder.itemView.getContext())
                 .load(item.getPicUrl())
                 .into(holder.binding.picCat);
+
+        holder.binding.btnCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = holder.itemView.getContext();
+                Intent intent = new Intent(context, Category1.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
