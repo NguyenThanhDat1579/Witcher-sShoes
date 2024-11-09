@@ -37,6 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CategoryModel item = items.get(position);
         holder.binding.titleCat.setText(item.getTitle());
+        holder.binding.txtIDCategory.setText(item.getId());
 
         Glide.with(holder.itemView.getContext())
                 .load(item.getPicUrl())
@@ -46,7 +47,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 context = holder.itemView.getContext();
+                String id = item.getId();
                 Intent intent = new Intent(context, Category1.class);
+                intent.putExtra("id", id);
                 context.startActivity(intent);
             }
         });

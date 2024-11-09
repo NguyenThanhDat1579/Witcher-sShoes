@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ProductModel implements Serializable {
+    private String ID;
     private String title;
     private String descriptions;
     private ArrayList<String> picUrl;
@@ -62,5 +63,13 @@ public class ProductModel implements Serializable {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 }

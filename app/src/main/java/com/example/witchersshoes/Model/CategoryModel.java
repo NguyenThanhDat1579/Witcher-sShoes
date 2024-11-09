@@ -2,13 +2,13 @@ package com.example.witchersshoes.Model;
 
 public class CategoryModel {
     private String title;
-    private int id;
+    private String id;
     private String picUrl;
 
     public CategoryModel() {
     }
 
-    public CategoryModel(String title, int id, String picUrl) {
+    public CategoryModel(String title, String id, String picUrl) {
         this.title = title;
         this.id = id;
         this.picUrl = picUrl;
@@ -22,11 +22,11 @@ public class CategoryModel {
         this.title = title;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

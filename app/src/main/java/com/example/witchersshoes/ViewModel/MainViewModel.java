@@ -70,6 +70,8 @@ public class MainViewModel extends ViewModel {
                 List<CategoryModel> lists = new ArrayList<>();
                 for (QueryDocumentSnapshot document : snapshot) {
                     CategoryModel list = document.toObject(CategoryModel.class);
+                    String documentId = document.getId();
+                    list.setId(documentId);
                     lists.add(list);
                 }
                 _category.setValue(lists);
@@ -90,6 +92,8 @@ public class MainViewModel extends ViewModel {
                 for (QueryDocumentSnapshot document : snapshot) {
                     try {
                         ProductModel list = document.toObject(ProductModel.class);
+                        String documentId = document.getId();
+                        list.setID(documentId);
                         Log.d("ProductModel", "Title: " + list.getTitle() + ", Price: " + list.getPrice());
                         lists.add(list);
                     } catch (Exception e) {
