@@ -3,6 +3,6 @@
     android:shape="rectangle"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <size android:width="100dp" android:height="50dp" />
-    <gradient android:startColor="#cccccc" android:endColor="#000000" />
+    <gradient android:startColor="#c0ab96" android:endColor="@color/brown" />
     <corners android:radius="10dp" />
 </shape>
