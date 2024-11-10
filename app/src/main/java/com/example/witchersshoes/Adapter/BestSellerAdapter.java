@@ -1,6 +1,7 @@
 package com.example.witchersshoes.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.witchersshoes.Activity.DetailActivity;
 import com.example.witchersshoes.Model.ProductModel;
 import com.example.witchersshoes.databinding.ViewholderBestSellerBinding;
 
@@ -39,7 +41,7 @@ public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductModel item = items.get(position);
         holder.binding.titleTxt.setText(item.getTitle());
-        holder.binding.priceTxt.setText(item.getPrice()+".000đ");
+        holder.binding.priceTxt.setText(item.getPrice()+".000₫");
         holder.binding.ratingTxt.setText(String.valueOf(item.getRating()));
         holder.binding.txtID.setText(String.valueOf(item.getID()));
 
@@ -48,11 +50,10 @@ public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.Vi
                 .apply(new RequestOptions().transform(new CenterCrop()))
                 .into(holder.binding.picBestSeller);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra("object", item);
+            context.startActivity(intent);
         });
     }
 

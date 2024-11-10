@@ -6,8 +6,9 @@ import java.util.ArrayList;
 public class ProductModel implements Serializable {
     private String ID;
     private String title;
-    private String descriptions;
+    private String description;
     private ArrayList<String> picUrl;
+    private int numberInCart;
 
     private int price;
     private double rating;
@@ -25,12 +26,12 @@ public class ProductModel implements Serializable {
         this.title = title;
     }
 
-    public String getDescriptions() {
-        return descriptions;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriptions(String descriptions) {
-        this.descriptions = descriptions;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ArrayList<String> getPicUrl() {
@@ -71,5 +72,13 @@ public class ProductModel implements Serializable {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public int getNumberInCart() {
+        return numberInCart;
+    }
+
+    public void setNumberInCart(int numberInCart) {
+        this.numberInCart = numberInCart;
     }
 }

@@ -74,7 +74,7 @@ public class DangNhap extends AppCompatActivity {
                     if(!queryDocumentSnapshots.isEmpty()){
                         for (DocumentSnapshot document : queryDocumentSnapshots) {
                             String documentID = document.getId();
-                            Intent intent = new Intent(DangNhap.this, TrangChuActivity.class);
+                            Intent intent = new Intent(DangNhap.this, MainActivity.class);
                             startActivity(intent);
                         }
                     }
