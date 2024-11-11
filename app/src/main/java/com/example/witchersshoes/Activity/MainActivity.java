@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import com.example.witchersshoes.Adapter.CategoryAdapter;
 import com.example.witchersshoes.Adapter.SliderAdapter;
 import com.example.witchersshoes.Helper.ManagmentCart;
 import com.example.witchersshoes.Model.SliderModel;
+import com.example.witchersshoes.R;
 import com.example.witchersshoes.ViewModel.MainViewModel;
 import com.example.witchersshoes.databinding.ActivityMainBinding;
 
@@ -27,6 +29,7 @@ public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private MainViewModel viewModel = new MainViewModel();
+    TextView txtName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,10 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        txtName = findViewById(R.id.txtName);
+        // Lấy dữ liệu tenKhachHang từ Intent
+        String tenKhachHang = getIntent().getStringExtra("tenKhachHang");
+        txtName.setText(tenKhachHang);
         initBanners();
         initCategory();
         initBestSeller();

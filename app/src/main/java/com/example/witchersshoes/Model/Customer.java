@@ -4,13 +4,18 @@ import java.util.HashMap;
 
 public class Customer {
     private String id;
+    private String email;
     private String username;
     private String password;
 
-    public Customer(String id, String username, String password) {
+    public Customer(String id, String email, String username, String password) {
         this.id = id;
+        this.email = email;
         this.username = username;
         this.password = password;
+    }
+
+    public Customer() {
     }
 
     public String getId() {
@@ -19,6 +24,14 @@ public class Customer {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -33,12 +46,11 @@ public class Customer {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
     public HashMap<String, Object> convertHashMap() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("tenDangNhap", username);
+        map.put("tenKhachHang", username);
+        map.put("email", email);
         map.put("matKhau", password);
         return map;
     }
