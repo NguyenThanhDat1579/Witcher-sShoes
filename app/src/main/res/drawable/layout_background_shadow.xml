@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <com.google.android.material.shape.MaterialShapeDrawable
-            android:shapeAppearanceOverlay="@style/ShapeWithShadow"
-            android:fillColor="@color/white"
-            android:padding="10dp" />
-    </item>
-</layer-list>

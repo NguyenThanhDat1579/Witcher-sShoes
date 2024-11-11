@@ -2,6 +2,6 @@
 <resources>
         <style name="BorderRadius">
             <item name="cornerFamily">rounded</item>
-            <item name="cornerSize">8dp</item> <!-- điều chỉnh bán kính ở đây -->
+            <item name="cornerSize">20dp</item> <!-- điều chỉnh bán kính ở đây -->
         </style>
 </resources>
