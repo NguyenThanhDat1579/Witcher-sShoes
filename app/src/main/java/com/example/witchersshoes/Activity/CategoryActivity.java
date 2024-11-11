@@ -18,6 +18,7 @@ import com.example.witchersshoes.Adapter.BestSellerAdapter;
 import com.example.witchersshoes.Model.ProductModel;
 import com.example.witchersshoes.R;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -83,8 +84,8 @@ public class CategoryActivity extends AppCompatActivity {
                 try {
                     // Chuyển đổi document thành ProductModel
                     ProductModel productModel = document.toObject(ProductModel.class);
-                    String documentId = document.getId();
-                    productModel.setID(documentId); // Lưu ID của document
+                    DocumentReference reference = productModel.getCategoryID();
+                    String documentId = reference.getId();
 
                     // Kiểm tra điều kiện thêm vào filterList
                     if (categoryID != null && categoryID.equals(documentId)) {

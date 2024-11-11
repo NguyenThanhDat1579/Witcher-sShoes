@@ -47,9 +47,6 @@ public class DetailActivity extends BaseActivity {
 
     private void initLists() {
 
-
-
-
         ArrayList<String> picList = new ArrayList<>(item.getPicUrl());
 
         Glide.with(this)
