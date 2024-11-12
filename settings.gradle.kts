@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Witcher'sShoes"
+rootProject.name = "WitcherCake"
 include(":app")
  

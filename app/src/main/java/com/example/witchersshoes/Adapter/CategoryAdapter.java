@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.witchersshoes.Activity.Category1;
+import com.example.witchersshoes.Activity.CategoryActivity;
 import com.example.witchersshoes.Model.CategoryModel;
 import com.example.witchersshoes.databinding.ViewholderCategoryBinding;
 
@@ -48,8 +48,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onClick(View v) {
                 context = holder.itemView.getContext();
                 String id = item.getId();
-                Intent intent = new Intent(context, Category1.class);
+                Intent intent = new Intent(context, CategoryActivity.class);
                 intent.putExtra("id", id);
+                intent.putExtra("title", item.getTitle());
                 context.startActivity(intent);
             }
         });

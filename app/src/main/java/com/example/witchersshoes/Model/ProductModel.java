@@ -1,18 +1,21 @@
 package com.example.witchersshoes.Model;
 
+import com.google.firebase.firestore.DocumentReference;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ProductModel implements Serializable {
     private String ID;
     private String title;
-    private String descriptions;
+    private String description;
     private ArrayList<String> picUrl;
+    private int numberInCart;
 
     private int price;
     private double rating;
 
-    private int categoryId;
+    private transient DocumentReference categoryID;
 
     public ProductModel() {
     }
@@ -25,12 +28,12 @@ public class ProductModel implements Serializable {
         this.title = title;
     }
 
-    public String getDescriptions() {
-        return descriptions;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriptions(String descriptions) {
-        this.descriptions = descriptions;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ArrayList<String> getPicUrl() {
@@ -57,12 +60,12 @@ public class ProductModel implements Serializable {
         this.rating = rating;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public DocumentReference getCategoryID() {
+        return categoryID;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryID(DocumentReference categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getID() {
@@ -71,5 +74,13 @@ public class ProductModel implements Serializable {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public int getNumberInCart() {
+        return numberInCart;
+    }
+
+    public void setNumberInCart(int numberInCart) {
+        this.numberInCart = numberInCart;
     }
 }
