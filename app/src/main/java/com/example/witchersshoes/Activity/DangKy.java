@@ -93,12 +93,17 @@ public class DangKy extends AppCompatActivity {
             passInputLayout.setError(null); // Xóa lỗi nếu mật khẩu hợp lệ
         }
         // Kiểm tra lại mật khẩu
-        if(!rePassword.equals(rePassword)){
+
+        if (rePassword.isEmpty()) {
+            rePassInputLayout.setError("Vui lòng nhập nhập lại mật khẩu");
+            isValid = false;
+        } else if (!password.equals(rePassword)) {
             rePassInputLayout.setError("Mật khẩu không trùng khớp");
             isValid = false;
         } else {
-            rePassInputLayout.setError(null);
+            rePassInputLayout.setError(null); // Xóa lỗi nếu mật khẩu trùng khớp
         }
+
 
         // Nếu tất cả đều hợp lệ, thực hiện đăng ký
         if (isValid) {
