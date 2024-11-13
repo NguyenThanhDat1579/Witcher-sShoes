@@ -1,62 +1,133 @@
 package com.example.witchersshoes.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.witchersshoes.Adapter.CartAdapter;
-import com.example.witchersshoes.Helper.ManagmentCart;
+import com.example.witchersshoes.Model.ProductModel;
+import com.example.witchersshoes.R;
 import com.example.witchersshoes.databinding.ActivityCartBinding;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class CartActivity extends BaseActivity {
-    private ActivityCartBinding binding;
-    private ManagmentCart managmentCart;
-    private double tax = 0.0;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class CartActivity extends AppCompatActivity {
+    private RecyclerView cartView;
+    private ImageView backBtn;
+    private TextView totalFeeTxt, taxTxt, deliveryTxt, totalTxt;
+    private CartAdapter cartAdapter;
+    private List<ProductModel> cartItems = new ArrayList<>();
+    private double totalFee = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCartBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_cart);
 
-        managmentCart = new ManagmentCart(this);
+        // Ánh xạ view
+        cartView = findViewById(R.id.cartView);
+        totalFeeTxt = findViewById(R.id.totalFeeTxt);
+        taxTxt = findViewById(R.id.taxTxt);
+        deliveryTxt = findViewById(R.id.deliveryTxt);
+        totalTxt = findViewById(R.id.totalTxt);
+        backBtn = findViewById(R.id.backBtn);
 
-        setVariable();
-        initCartList();
+        // Cài đặt RecyclerView
+        cartView.setLayoutManager(new LinearLayoutManager(this));
 
-        caLculatorCart();
+        // Tải dữ liệu giỏ hàng từ Firestore
+        loadCartItems();
 
-        Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        View decor = window.getDecorView();
-        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
+        backBtn.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, MainActivity.class)));
     }
 
-    private void initCartList() {
-        binding.cartView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        binding.cartView.setAdapter(new CartAdapter(managmentCart.getListCart(), this, this::caLculatorCart));
+    private void loadCartItems() {
+        SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
+        String khachHangID = preferences.getString("khachHangID", null);
+
+        if (khachHangID != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("KhachHang")
+                    .document(khachHangID)
+                    .collection("Cart")
+                    .addSnapshotListener((value, error) -> { // Sử dụng addSnapshotListener để cập nhật realtime
+                        if (error != null) {
+                            Toast.makeText(this, "Lỗi khi tải giỏ hàng: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (value != null) {
+                            cartItems.clear();
+                            for (DocumentSnapshot document : value.getDocuments()) {
+                                ProductModel item = new ProductModel();
+                                // Lưu ID của document làm ID sản phẩm
+                                item.setID(document.getId());
+                                item.setTitle(document.getString("tenSanPham"));
+                                item.setNumberInCart(document.getLong("soLuong") != null ?
+                                        document.getLong("soLuong").intValue() : 1);
+                                item.setPrice(document.getDouble("giaTien") != null ?
+                                        document.getDouble("giaTien") : 0.0);
+
+                                String imageUrl = document.getString("hinhAnh");
+                                item.setPicUrl(new ArrayList<>(Collections.singletonList(
+                                        imageUrl != null ? imageUrl : "default_image_url")));
+
+                                cartItems.add(item);
+                            }
+
+                            // Cập nhật UI
+                            if (cartAdapter == null) {
+                                cartAdapter = new CartAdapter(CartActivity.this, cartItems,
+                                        CartActivity.this::calculateCartTotal);
+                                cartView.setAdapter(cartAdapter);
+                            } else {
+                                cartAdapter.notifyDataSetChanged();
+                            }
+
+                            calculateCartTotal();
+
+                            // Hiển thị thông báo nếu giỏ hàng trống
+                            if (cartItems.isEmpty()) {
+                                Toast.makeText(CartActivity.this,
+                                        "Giỏ hàng của bạn đang trống", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(CartActivity.this, MainActivity.class));
+                            }
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "Vui lòng đăng nhập để xem giỏ hàng", Toast.LENGTH_SHORT).show();
+            // Có thể chuyển hướng đến màn hình đăng nhập
+            // startActivity(new Intent(CartActivity.this, LoginActivity.class));
+            finish();
+        }
     }
 
-    private void caLculatorCart() {
-        double percentTax = 0.02;
-        double delivery = 15.0;
-        tax = Math.round(managmentCart.getTotalFee() * percentTax * 100) / 100.0;
-        double total = Math.round((managmentCart.getTotalFee() + tax + delivery) * 100) / 100.0;
-        double itemTotal = Math.round(managmentCart.getTotalFee() * 100) / 100.0;
+    private void calculateCartTotal() {
+        totalFee = 0;
+        for (ProductModel item : cartItems) {
+            totalFee += item.getPrice() * item.getNumberInCart();
+        }
 
-        binding.totalFeeTxt.setText(itemTotal+"00₫");
-        binding.taxTxt.setText(tax+"00₫");
-        binding.deliveryTxt.setText(delivery+"00₫");
-        binding.totalTxt.setText(total+"00₫");
-    }
+        double tax = totalFee * 0.1; // Thuế 10%
+        double deliveryFee = 20; // Phí vận chuyển cố định
 
-    private void setVariable() {
-        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, MainActivity.class)));
+        totalFeeTxt.setText(totalFee+"00₫");
+        taxTxt.setText(tax+"00₫");
+        deliveryTxt.setText(deliveryFee+"00₫");
+        totalTxt.setText((totalFee + tax + deliveryFee)+"00₫");
     }
 }
