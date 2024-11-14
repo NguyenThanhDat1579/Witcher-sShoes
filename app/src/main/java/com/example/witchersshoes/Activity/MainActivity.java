@@ -17,7 +17,6 @@ import androidx.viewpager2.widget.MarginPageTransformer;
 import com.example.witchersshoes.Adapter.BestSellerAdapter;
 import com.example.witchersshoes.Adapter.CategoryAdapter;
 import com.example.witchersshoes.Adapter.SliderAdapter;
-import com.example.witchersshoes.Helper.ManagmentCart;
 import com.example.witchersshoes.Model.SliderModel;
 import com.example.witchersshoes.R;
 import com.example.witchersshoes.ViewModel.MainViewModel;
@@ -56,12 +55,9 @@ public class MainActivity extends BaseActivity {
 
     private void bottomNavigation() {
         binding.cartBtn.setOnClickListener(v -> {
-            ManagmentCart managmentCart = new ManagmentCart(MainActivity.this);
-            if (!managmentCart.getListCart().isEmpty()){
+
                 startActivity(new Intent(MainActivity.this, CartActivity.class));
-            } else {
-                Toast.makeText(MainActivity.this, "Giỏ hàng của bạn trống!", Toast.LENGTH_SHORT).show();
-            }
+
         });
     }
 

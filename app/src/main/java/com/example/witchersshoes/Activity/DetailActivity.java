@@ -1,8 +1,10 @@
 package com.example.witchersshoes.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,17 +14,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.witchersshoes.Adapter.PicListAdapter;
-import com.example.witchersshoes.Helper.ManagmentCart;
 import com.example.witchersshoes.Model.ProductModel;
 import com.example.witchersshoes.databinding.ActivityDetailBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DetailActivity extends BaseActivity {
     private ActivityDetailBinding binding;
     private ProductModel item;
     private int numberOrder = 1;
-    private ManagmentCart managmentCart;
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +38,9 @@ public class DetailActivity extends BaseActivity {
         binding = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
-        managmentCart = new ManagmentCart(this);
 
         getBundleExtra();
         initLists();
@@ -63,38 +72,96 @@ public class DetailActivity extends BaseActivity {
 
         binding.titleTxt.setText(item.getTitle());
         binding.desciptionTxt.setText(item.getDescription());
-        binding.priceTxt.setText(item.getPrice()+".000₫");
+        binding.priceTxt.setText(item.getPrice()+"00₫");
         binding.ratingTxt.setText(item.getRating() + " ");
         binding.sellerNameTxt.setText("The Witcher Cake Shop");
 
-        binding.addToCartBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                item.setNumberInCart(numberOrder);
-                managmentCart.insertItems(item);
+        binding.addToCartBtn.setOnClickListener(v -> {
+            SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
+            String khachHangID = preferences.getString("khachHangID", null);
+
+            if (khachHangID != null) {
+                // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+                db.collection("KhachHang")
+                        .document(khachHangID)
+                        .collection("Cart")
+                        .document(item.getID())
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                // Sản phẩm đã có trong giỏ hàng, cập nhật số lượng
+                                Long soLuongHienTai = documentSnapshot.getLong("soLuong");
+                                int soLuongMoi = soLuongHienTai != null ? soLuongHienTai.intValue() + numberOrder : numberOrder;
+
+                                Map<String, Object> gioHangData = new HashMap<>();
+                                gioHangData.put("soLuong", soLuongMoi);
+
+                                db.collection("KhachHang")
+                                        .document(khachHangID)
+                                        .collection("Cart")
+                                        .document(item.getID())
+                                        .update(gioHangData)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(DetailActivity.this, "Cập nhật số lượng thành công!",
+                                                    Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(DetailActivity.this, "Cập nhật số lượng thất bại!",
+                                                    Toast.LENGTH_SHORT).show();
+                                        });
+                            } else {
+                                // Sản phẩm chưa có trong giỏ hàng, thêm mới
+                                item.setNumberInCart(numberOrder);
+
+                                Map<String, Object> gioHangData = new HashMap<>();
+                                gioHangData.put("sanPhamID", item.getID());
+                                gioHangData.put("tenSanPham", item.getTitle());
+                                gioHangData.put("giaTien", item.getPrice());
+                                gioHangData.put("soLuong", item.getNumberInCart());
+                                gioHangData.put("hinhAnh", item.getPicUrl().get(0));
+
+                                db.collection("KhachHang")
+                                        .document(khachHangID)
+                                        .collection("Cart")
+                                        .document(item.getID())
+                                        .set(gioHangData)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(DetailActivity.this, "Thêm vào giỏ hàng thành công!",
+                                                    Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(DetailActivity.this, "Thêm vào giỏ hàng thất bại!",
+                                                    Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(DetailActivity.this, "Lỗi khi kiểm tra giỏ hàng: " +
+                                    e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                Toast.makeText(DetailActivity.this, "Vui lòng đăng nhập để thêm vào giỏ hàng",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
         binding.backBtn.setOnClickListener(v -> startActivity(new Intent(DetailActivity.this, MainActivity.class)));
 
         binding.cartBtn.setOnClickListener(v -> {
-            if (!managmentCart.getListCart().isEmpty()) {
+
                 startActivity(new Intent(DetailActivity.this, CartActivity.class));
-            } else {
-                Toast.makeText(DetailActivity.this, "Giỏ hàng của bạn trống!", Toast.LENGTH_SHORT).show();
-            }
         });
 
 
         binding.msgToSellerBtn.setOnClickListener(v -> {
             Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-            sendIntent.setData(Uri.parse("sms:" + "0981236547"));
+            sendIntent.setData(Uri.parse("sms:" + "0987654321"));
             sendIntent.putExtra("sms_body", "Nhập nội dung tin nhắn");
             startActivity(sendIntent);
         });
 
         binding.callToSellerBtn.setOnClickListener(v -> {
-            String phone = String.valueOf("0981236547");
+            String phone = String.valueOf("0987654321");
             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
             startActivity(intent);
         });

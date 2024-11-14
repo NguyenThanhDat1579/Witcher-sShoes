@@ -49,6 +49,7 @@ public class Customer {
 
     public HashMap<String, Object> convertHashMap() {
         HashMap<String, Object> map = new HashMap<>();
+        map.put("khachHangID", id);
         map.put("tenKhachHang", username);
         map.put("email", email);
         map.put("matKhau", password);

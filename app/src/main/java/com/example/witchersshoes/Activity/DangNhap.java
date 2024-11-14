@@ -111,6 +111,7 @@ public class DangNhap extends AppCompatActivity {
                         for (DocumentSnapshot document : queryDocumentSnapshots) {
                             // Lấy trường 'tenKhachHang' từ tài liệu
                             String tenKhachHang = document.getString("tenKhachHang");
+                            String id = document.getId(); // Lấy ID khách hàng từ Firestore
 
                             // Lưu thông tin đăng nhập vào SharedPreferences nếu checkbox được chọn
                             SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
@@ -126,12 +127,15 @@ public class DangNhap extends AppCompatActivity {
                                 editor.remove("email");
                                 editor.remove("password");
                             }
+                            editor.putString("khachHangID", id); // Lưu ID khách hàng
+//                            Toast.makeText(this, "khachHangID: "+ id, Toast.LENGTH_SHORT).show();
                             editor.apply();
 
 
 
                             Intent intent = new Intent(DangNhap.this, MainActivity.class);
                             intent.putExtra("tenKhachHang", tenKhachHang);
+                            intent.putExtra("khachHangID", id);
                             startActivity(intent);
                         }
                     }
