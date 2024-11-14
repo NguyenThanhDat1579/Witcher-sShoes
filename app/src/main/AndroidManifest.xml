@@ -15,10 +15,10 @@
         android:theme="@style/Theme.WitchersShoes"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.ProfileActivity"
+            android:name=".Activity.OrderActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.DangKy"
+            android:name=".Activity.PaymentDetailActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.CategoryActivity"
@@ -28,15 +28,9 @@
             android:exported="false" />
         <activity
             android:name=".Activity.CartActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
-            android:name=".Activity.DangNhap"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.ManHinhChaoActivity"
+            android:name=".Activity.DangKy"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,6 +38,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activity.DangNhap"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
