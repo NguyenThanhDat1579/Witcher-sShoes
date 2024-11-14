@@ -12,10 +12,10 @@ public class ProductModel implements Serializable {
     private ArrayList<String> picUrl;
     private int numberInCart;
 
-    private int price;
+    private double price;
     private double rating;
 
-    private DocumentReference categoryID;
+    private transient DocumentReference categoryID;
 
     public ProductModel() {
     }
@@ -44,11 +44,11 @@ public class ProductModel implements Serializable {
         this.picUrl = picUrl;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

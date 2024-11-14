@@ -82,10 +82,10 @@ public class CategoryActivity extends AppCompatActivity {
             // Lặp qua từng document trong snapshot
             for (QueryDocumentSnapshot document : snapshot) {
                 try {
-
+                    // Chuyển đổi document thành ProductModel
                     ProductModel productModel = document.toObject(ProductModel.class);
-                    DocumentReference categoryRef = productModel.getCategoryID();
-                    String documentId = categoryRef.getId();
+                    DocumentReference reference = productModel.getCategoryID();
+                    String documentId = reference.getId();
 
                     // Kiểm tra điều kiện thêm vào filterList
                     if (categoryID != null && categoryID.equals(documentId)) {

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ManHinhChaoActivity">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/intro_logo"
+           />
+
+        <TextView
+            android:id="@+id/txtIntro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Satisfy Your Cravings with Our Fresh Cakes, Donuts, and Pastries"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/drarkGrey"
+            android:text="Khám phá những món ngon từ các nhà cung cấp hàng đầu"/>
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/drarkGrey"
+            android:text="Nhận gợi ý sản phẩm phù hợp nhất với sở thích của bạn"/>
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/drarkGrey"
+            android:text="Tận hưởng giao hàng nhanh chóng và miễn phí"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+</ScrollView>
+

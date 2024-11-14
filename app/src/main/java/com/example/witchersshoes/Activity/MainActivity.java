@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,17 +17,24 @@ import androidx.viewpager2.widget.MarginPageTransformer;
 import com.example.witchersshoes.Adapter.BestSellerAdapter;
 import com.example.witchersshoes.Adapter.CategoryAdapter;
 import com.example.witchersshoes.Adapter.SliderAdapter;
-import com.example.witchersshoes.Helper.ManagmentCart;
+import com.example.witchersshoes.Model.FavoriteEvent;
 import com.example.witchersshoes.Model.SliderModel;
+import com.example.witchersshoes.R;
 import com.example.witchersshoes.ViewModel.MainViewModel;
 import com.example.witchersshoes.databinding.ActivityMainBinding;
+
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
-
+    private BestSellerAdapter bestSellerAdapter;
     private ActivityMainBinding binding;
     private MainViewModel viewModel = new MainViewModel();
+    TextView txtName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,13 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Đăng ký EventBus
+        EventBus.getDefault().register(this);
+
+        txtName = findViewById(R.id.txtName);
+        // Lấy dữ liệu tenKhachHang từ Intent
+        String tenKhachHang = getIntent().getStringExtra("tenKhachHang");
+        txtName.setText(tenKhachHang);
         initBanners();
         initCategory();
         initBestSeller();
@@ -47,14 +62,21 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Hủy đăng ký EventBus
+        EventBus.getDefault().unregister(this);
+    }
+
     private void bottomNavigation() {
         binding.cartBtn.setOnClickListener(v -> {
-            ManagmentCart managmentCart = new ManagmentCart(MainActivity.this);
-            if (!managmentCart.getListCart().isEmpty()){
+
                 startActivity(new Intent(MainActivity.this, CartActivity.class));
-            } else {
-                Toast.makeText(MainActivity.this, "Giỏ hàng của bạn trống!", Toast.LENGTH_SHORT).show();
-            }
+
+        });
+        binding.favoriteBtn.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, FavoriteActivity.class));
         });
     }
 
@@ -62,10 +84,19 @@ public class MainActivity extends BaseActivity {
         binding.progressBarBestSeller.setVisibility(View.VISIBLE);
         viewModel.getBestSeller().observe(this, items -> {
             binding.recyclerViewBestSeller.setLayoutManager(new GridLayoutManager(this, 2));
-            binding.recyclerViewBestSeller.setAdapter(new BestSellerAdapter(items));
+            bestSellerAdapter = new BestSellerAdapter(items, false);
+            binding.recyclerViewBestSeller.setAdapter(bestSellerAdapter);
             binding.progressBarBestSeller.setVisibility(View.GONE);
         });
         viewModel.loadBestSeller();
+    }
+
+    // Method để nhận event từ EventBus
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFavoriteEvent(FavoriteEvent event) {
+        if (bestSellerAdapter != null) {
+            bestSellerAdapter.updateFavoriteStatus(event.getProductId(), event.isFavorite());
+        }
     }
 
     private void initCategory() {

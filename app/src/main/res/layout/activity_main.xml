@@ -42,7 +42,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/txtName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Toan Nam Nguyen Dat Si"
@@ -326,6 +326,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/favoriteBtn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
