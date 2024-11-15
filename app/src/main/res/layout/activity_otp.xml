@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.OtpActivity">
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OTP"/>
+
+    <EditText
+        android:id="@+id/edtOtp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="submit"/>
+
+    <com.example.pinview.kendis.pinview.CustomPinView
+        android:id="@+id/custom_pin_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:codeDigits="four"
+        app:inputMask="true" />
+
+
+</LinearLayout>

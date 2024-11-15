@@ -34,9 +34,13 @@ android {
     buildFeatures{
         viewBinding = true
     }
+
+
 }
 
 dependencies {
+
+    
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
@@ -50,6 +54,9 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
+    implementation(files("libs\\activation.jar"))
+    implementation(files("libs\\additionnal.jar"))
+    implementation(files("libs\\mail.jar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

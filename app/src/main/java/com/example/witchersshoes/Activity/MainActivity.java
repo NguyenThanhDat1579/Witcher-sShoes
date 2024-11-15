@@ -38,8 +38,16 @@ public class MainActivity extends BaseActivity {
 
         txtName = findViewById(R.id.txtName);
         // Lấy dữ liệu tenKhachHang từ Intent
+        String tenKhachHang1 = getIntent().getStringExtra("name");
         String tenKhachHang = getIntent().getStringExtra("tenKhachHang");
-        txtName.setText(tenKhachHang);
+
+//        if(tenKhachHang.isEmpty()){
+//            txtName.setText(tenKhachHang);
+//        }
+//        else{
+//            txtName.setText(tenKhachHang1);
+//        }
+
         initBanners();
         initCategory();
         initBestSeller();
