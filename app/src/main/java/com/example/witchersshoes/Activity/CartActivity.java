@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CartActivity extends AppCompatActivity {
     private RecyclerView cartView;
     private ImageView backBtn;
+    private Button btnPayment;
     private TextView totalFeeTxt, taxTxt, deliveryTxt, totalTxt;
     private CartAdapter cartAdapter;
     private List<ProductModel> cartItems = new ArrayList<>();
@@ -45,6 +47,7 @@ public class CartActivity extends AppCompatActivity {
         deliveryTxt = findViewById(R.id.deliveryTxt);
         totalTxt = findViewById(R.id.totalTxt);
         backBtn = findViewById(R.id.backBtn);
+        btnPayment = findViewById(R.id.btnPayment);
 
         // Cài đặt RecyclerView
         cartView.setLayoutManager(new LinearLayoutManager(this));
@@ -53,6 +56,13 @@ public class CartActivity extends AppCompatActivity {
         loadCartItems();
 
         backBtn.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, MainActivity.class)));
+        btnPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CartActivity.this, PaymentDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadCartItems() {

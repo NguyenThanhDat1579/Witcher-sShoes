@@ -26,8 +26,8 @@ import java.util.UUID;
 public class DangKy extends AppCompatActivity {
 
     FirebaseFirestore db;
-    TextInputLayout namelInputLayout, emailInputLayout, passInputLayout, rePassInputLayout;
-    EditText edtUsername, edtEmail, edtPassword, edtRePassword;
+    TextInputLayout namelInputLayout, emailInputLayout, phoneInputLayout, addressInputLayout, passInputLayout, rePassInputLayout;
+    EditText edtUsername, edtEmail,edtPhone,edtAddress, edtPassword, edtRePassword;
     Button btnRegister, btnLogin;
 
     @Override
@@ -59,6 +59,8 @@ public class DangKy extends AppCompatActivity {
         String id = UUID.randomUUID().toString();
         String username = edtUsername.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
+        String phone = edtPhone.getText().toString().trim();
+        String address = edtAddress.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
         String rePassword = edtRePassword.getText().toString().trim();
 
@@ -83,6 +85,25 @@ public class DangKy extends AppCompatActivity {
             isValid = false;
         } else {
             emailInputLayout.setError(null); // Xóa lỗi nếu email hợp lệ
+        }
+
+        // Kiểm tra Phone
+        if (phone.isEmpty()) {
+            phoneInputLayout.setError("Số điện thoại không được để trống");
+            isValid = false;
+        } else if (!Patterns.PHONE.matcher(phone).matches()) {
+            phoneInputLayout.setError("Số điện thoại không hợp lệ");
+            isValid = false;
+        } else {
+            phoneInputLayout.setError(null); // Xóa lỗi nếu email hợp lệ
+        }
+
+        // Kiểm tra Address
+        if(address.isEmpty()){
+            addressInputLayout.setError("Địa chỉ không được để trống");
+            isValid = false;
+        }else{
+            addressInputLayout.setError(null);
         }
 
         // Kiểm tra mật khẩu
@@ -116,7 +137,7 @@ public class DangKy extends AppCompatActivity {
 
 
 
-            Customer customer = new Customer(id,  email, username, password);
+            Customer customer = new Customer(id,  email, username, password, phone, address);
             HashMap<String, Object> customers = customer.convertHashMap();
             //push du lieu len
             db.collection("KhachHang").document(id)
@@ -147,10 +168,14 @@ public class DangKy extends AppCompatActivity {
     public void init(){
         namelInputLayout = findViewById(R.id.namelInputLayout);
         emailInputLayout = findViewById(R.id.emailInputLayout);
+        phoneInputLayout = findViewById(R.id.phoneInputLayout);
+        addressInputLayout = findViewById(R.id.addressInputLayout);
         passInputLayout = findViewById(R.id.passInputLayout);
         rePassInputLayout = findViewById(R.id.rePassInputLayout);
         edtUsername = findViewById(R.id.edtUsername);
         edtEmail = findViewById(R.id.edtEmail);
+        edtPhone = findViewById(R.id.edtPhone);
+        edtAddress = findViewById(R.id.edtAddress);
         edtPassword = findViewById(R.id.edtPassword);
         edtRePassword = findViewById(R.id.edtRePassword);
         btnRegister = findViewById(R.id.btnRegister);
