@@ -9,6 +9,7 @@ public class Product {
     private String Image;
     private String description;
     private int Stock;
+    private int quantity;
     private DocumentReference categoryID;
 
     public Product(){}
@@ -21,6 +22,15 @@ public class Product {
         this.description = description;
         Stock = stock;
         this.categoryID = categoryID;
+    }
+
+
+    public Product (String id, String productName, String price, String image, int quantity) {
+        this.id = id;
+        this.productName = productName;
+        this.price = price;
+        this.Image = image;
+        this.quantity = quantity;
     }
 
     public String getId() {
@@ -78,6 +88,14 @@ public class Product {
 
     public void setStock(int stock) {
         Stock = stock;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
 
