@@ -15,26 +15,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.witchersshoes.R;
 import com.example.witchersshoes.Model.Customer;
-import com.example.witchersshoes.SendMail;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 public class DangKy extends AppCompatActivity {
 
     FirebaseFirestore db;
-    TextInputLayout nameInputLayout, emailInputLayout, passInputLayout, rePassInputLayout;
-    EditText edtUsername, edtEmail, edtPassword, edtRePassword;
+    TextInputLayout namelInputLayout, emailInputLayout, phoneInputLayout, addressInputLayout, passInputLayout, rePassInputLayout;
+    EditText edtUsername, edtEmail,edtPhone,edtAddress, edtPassword, edtRePassword;
     Button btnRegister, btnLogin;
-    SendMail sendMail;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +36,6 @@ public class DangKy extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dang_ky);
         init();
-        sendMail = new SendMail();
 
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -63,132 +56,126 @@ public class DangKy extends AppCompatActivity {
 
     }
     public void checkRegister(){
+        String id = UUID.randomUUID().toString();
         String username = edtUsername.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
+        String phone = edtPhone.getText().toString().trim();
+        String address = edtAddress.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
         String rePassword = edtRePassword.getText().toString().trim();
 
 
+        // Kiểm tra
+        boolean isValid = true;
 
-        // Kiểm tra tên người dùng
-        if (username.isEmpty()) {
-            nameInputLayout.setError("Tên không được để trống");
-        } else {
-            nameInputLayout.setError(null); // Xóa lỗi nếu tên hợp lệ
+        // Kiểm tra name
+        if(username.isEmpty()){
+            namelInputLayout.setError("Tên không được để trống");
+            isValid = false;
+        }else{
+            namelInputLayout.setError(null);
         }
 
         // Kiểm tra email
         if (email.isEmpty()) {
             emailInputLayout.setError("Email không được để trống");
+            isValid = false;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailInputLayout.setError("Email không hợp lệ");
-        } else if (!email.endsWith("@gmail.com")) {
-            emailInputLayout.setError("Email phải có định dạng @gmail.com");
+            isValid = false;
         } else {
             emailInputLayout.setError(null); // Xóa lỗi nếu email hợp lệ
         }
 
+        // Kiểm tra Phone
+        if (phone.isEmpty()) {
+            phoneInputLayout.setError("Số điện thoại không được để trống");
+            isValid = false;
+        } else if (!Patterns.PHONE.matcher(phone).matches()) {
+            phoneInputLayout.setError("Số điện thoại không hợp lệ");
+            isValid = false;
+        } else {
+            phoneInputLayout.setError(null); // Xóa lỗi nếu email hợp lệ
+        }
+
+        // Kiểm tra Address
+        if(address.isEmpty()){
+            addressInputLayout.setError("Địa chỉ không được để trống");
+            isValid = false;
+        }else{
+            addressInputLayout.setError(null);
+        }
+
         // Kiểm tra mật khẩu
-        if (password.isEmpty()) {
+        if (password.isEmpty() ) {
             passInputLayout.setError("Mật khẩu không được để trống");
+            isValid = false;
         } else {
             passInputLayout.setError(null); // Xóa lỗi nếu mật khẩu hợp lệ
         }
-
         // Kiểm tra lại mật khẩu
+
         if (rePassword.isEmpty()) {
-            rePassInputLayout.setError("Vui lòng nhập lại mật khẩu");
+            rePassInputLayout.setError("Vui lòng nhập nhập lại mật khẩu");
+            isValid = false;
         } else if (!password.equals(rePassword)) {
             rePassInputLayout.setError("Mật khẩu không trùng khớp");
+            isValid = false;
         } else {
             rePassInputLayout.setError(null); // Xóa lỗi nếu mật khẩu trùng khớp
         }
 
-        // Nếu tất cả thông tin hợp lệ, tiến hành kiểm tra email trong Firestore
-        if (isValid(username, email, password, rePassword)) {
-            checkIfEmailExistsInFirestore(email, password, username);
+
+        // Nếu tất cả đều hợp lệ, thực hiện đăng ký
+        if (isValid) {
+
+            // Tạo ProgressDialog
+            ProgressDialog progressDialog = new ProgressDialog(DangKy.this);
+            progressDialog.setMessage("Đang đăng ký...");
+            progressDialog.setCancelable(false); // Người dùng không thể huỷ bỏ khi đang load
+            progressDialog.show();
+
+
+
+            Customer customer = new Customer(id,  email, username, password, phone, address);
+            HashMap<String, Object> customers = customer.convertHashMap();
+            //push du lieu len
+            db.collection("KhachHang").document(id)
+                    .set(customers)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            progressDialog.dismiss(); // Tắt loading khi thành công
+                            Toast.makeText(DangKy.this, "thanh cong", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(DangKy.this, DangNhap.class);
+                            startActivity(intent);
+                            finishAffinity();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss(); // Tắt loading khi thành công
+                            Toast.makeText(DangKy.this, "that bai", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
         }
 
 
-//            Customer customer = new Customer(id,  email, username, password);
-//            HashMap<String, Object> customers = customer.convertHashMap();
-//            //push du lieu len
-//            db.collection("KhachHang").document(id)
-//                    .set(customers)
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void unused) {
-//                            progressDialog.dismiss(); // Tắt loading khi thành công
-//                            Toast.makeText(DangKy.this, "thanh cong", Toast.LENGTH_SHORT).show();
-//                            Intent intent = new Intent(DangKy.this, DangNhap.class);
-//                            startActivity(intent);
-//                            finishAffinity();
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            progressDialog.dismiss(); // Tắt loading khi thành công
-//                            Toast.makeText(DangKy.this, "that bai", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-
-    }
-
-    private boolean isValid(String username, String email, String password, String rePassword) {
-        // Kiểm tra xem tất cả các trường hợp có hợp lệ không
-        return !username.isEmpty() &&
-                !email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches() && email.endsWith("@gmail.com") &&
-                !password.isEmpty() && !rePassword.isEmpty() && password.equals(rePassword);
-    }
-
-    public void checkIfEmailExistsInFirestore(String email, String pass, String name) {
-        db.collection("KhachHang")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        boolean emailExists = false;
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            emailExists = true;
-                            break;
-                        }
-                        if (emailExists) {
-                            emailInputLayout.setError("Email đã tồn tại");
-                        } else {
-                            emailInputLayout.setError(null); // Xóa lỗi nếu email chưa tồn tại
-                            String otp = generateOtp();
-                            // Chuyển sang OtpActivity nếu email chưa tồn tại
-                            sendMail.Send(DangKy.this, email, "Xác thực", "Mã OTP là "+otp);
-                            Intent intent = new Intent(DangKy.this, OtpActivity.class);
-                            intent.putExtra("name", name);
-                            intent.putExtra("email", email); // Truyền email sang OtpActivity
-                            intent.putExtra("otp", otp); // Truyền otp sang OtpActivity
-                            intent.putExtra("pass", pass); // Truyền pass sang OtpActivity
-                            startActivity(intent);
-                        }
-                    } else {
-                        Toast.makeText(DangKy.this, "Thất bại khi kiểm tra email", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-    }
-
-    // Hàm tạo mã OTP ngẫu nhiên 6 chữ số
-    public String generateOtp() {
-        Random random = new Random();
-        int otp = 100000 + random.nextInt(900000);  // Tạo số ngẫu nhiên trong khoảng 100000 đến 999999
-        return String.valueOf(otp);
-    }
 
 
     public void init(){
-        nameInputLayout = findViewById(R.id.namelInputLayout);
+        namelInputLayout = findViewById(R.id.namelInputLayout);
         emailInputLayout = findViewById(R.id.emailInputLayout);
+        phoneInputLayout = findViewById(R.id.phoneInputLayout);
+        addressInputLayout = findViewById(R.id.addressInputLayout);
         passInputLayout = findViewById(R.id.passInputLayout);
         rePassInputLayout = findViewById(R.id.rePassInputLayout);
         edtUsername = findViewById(R.id.edtUsername);
         edtEmail = findViewById(R.id.edtEmail);
+        edtPhone = findViewById(R.id.edtPhone);
+        edtAddress = findViewById(R.id.edtAddress);
         edtPassword = findViewById(R.id.edtPassword);
         edtRePassword = findViewById(R.id.edtRePassword);
         btnRegister = findViewById(R.id.btnRegister);

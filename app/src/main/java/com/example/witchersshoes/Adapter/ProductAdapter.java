@@ -1,5 +1,6 @@
 package com.example.witchersshoes.Adapter;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private List<Product> productList;
 
-    public ProductAdapter(List<Product> productList) {
+    public ProductAdapter(Context context, List<Product> productList) {
         this.productList = productList;
     }
 

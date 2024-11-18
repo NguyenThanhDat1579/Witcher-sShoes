@@ -125,6 +125,8 @@ public class DangNhap extends AppCompatActivity {
                             // Lấy trường 'tenKhachHang' từ tài liệu
                             String tenKhachHang = document.getString("tenKhachHang");
                             String id = document.getId(); // Lấy ID khách hàng từ Firestore
+                            String diaChi = document.getString("diaChi");
+                            String soDienThoai = document.getString("soDienThoai");
 
                             // Lưu thông tin đăng nhập vào SharedPreferences nếu checkbox được chọn
                             SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
@@ -141,6 +143,9 @@ public class DangNhap extends AppCompatActivity {
                                 editor.remove("password");
                             }
                             editor.putString("khachHangID", id); // Lưu ID khách hàng
+                            editor.putString("tenKhachHang",tenKhachHang);
+                            editor.putString("diaChi",diaChi);
+                            editor.putString("soDienThoai",soDienThoai);
 //                            Toast.makeText(this, "khachHangID: "+ id, Toast.LENGTH_SHORT).show();
                             editor.apply();
 
