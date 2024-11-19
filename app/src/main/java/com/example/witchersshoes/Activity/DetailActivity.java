@@ -63,10 +63,6 @@ public class DetailActivity extends BaseActivity {
 
         SharedPreferences preferences = this.getSharedPreferences("THONGTIN", Context.MODE_PRIVATE);
         khachHangID = preferences.getString("khachHangID", null);
-
-
-
-
     }
 
     @Override

@@ -231,10 +231,10 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/logoutBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
                 android:background="#F6F6F6"
                 android:text="Log out"
                 android:textColor="#808080"
