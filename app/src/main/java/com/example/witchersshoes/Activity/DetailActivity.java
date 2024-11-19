@@ -69,6 +69,12 @@ public class DetailActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkFavoriteStatus(item.getID());
+    }
+
     private void initLists() {
 
         ArrayList<String> picList = new ArrayList<>(item.getPicUrl());
