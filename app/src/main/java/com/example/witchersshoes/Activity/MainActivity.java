@@ -60,6 +60,11 @@ public class MainActivity extends BaseActivity {
         View decor = window.getDecorView();
         decor.setSystemUiVisibility(0);
 
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        intent.putExtra("tenKhachHang", getIntent().getStringExtra("tenKhachHang"));
+        intent.putExtra("email", getIntent().getStringExtra("email"));
+        startActivity(intent);
+
     }
 
     @Override
@@ -81,6 +86,9 @@ public class MainActivity extends BaseActivity {
 
         binding.orderBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, OrderDetailActivity.class));
+        });
+        binding.profileBtn.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         });
     }
 

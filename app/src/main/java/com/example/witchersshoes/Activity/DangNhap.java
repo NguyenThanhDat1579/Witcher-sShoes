@@ -141,7 +141,9 @@ public class DangNhap extends AppCompatActivity {
                             Intent intent = new Intent(DangNhap.this, MainActivity.class);
                             intent.putExtra("tenKhachHang", tenKhachHang);
                             intent.putExtra("khachHangID", id);
+                            intent.putExtra("email", username);
                             startActivity(intent);
+
                         }
                     }
                     else{

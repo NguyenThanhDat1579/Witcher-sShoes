@@ -28,7 +28,7 @@
                 app:srcCompat="@drawable/profile" />
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/profTxtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -37,7 +37,7 @@
                 android:text="Si dep trai wa" />
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/profEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -47,6 +47,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/khampha"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@drawable/edittext_none_border"
@@ -69,7 +70,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:layout_weight="1"
-                android:text="Subscription Plan" />
+                android:text="Khám phá" />
 
             <ImageView
                 android:id="@+id/imageView13"
@@ -82,6 +83,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/cart"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@drawable/edittext_none_border"
@@ -104,7 +106,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:layout_weight="1"
-                android:text="Payment" />
+                android:text="Giỏ hàng" />
 
             <ImageView
                 android:id="@+id/imageView15"
@@ -117,6 +119,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/favorite"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@drawable/edittext_none_border"
@@ -139,7 +142,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:layout_weight="1"
-                android:text="Your Promos" />
+                android:text="Yêu thích" />
 
             <ImageView
                 android:id="@+id/imageView19"
@@ -152,6 +155,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/order"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@drawable/edittext_none_border"
@@ -174,7 +178,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:layout_weight="1"
-                android:text="Setting" />
+                android:text="Đơn hàng" />
 
             <ImageView
                 android:id="@+id/imageView21"
@@ -187,6 +191,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/profile"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@drawable/edittext_none_border"
@@ -209,7 +214,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:layout_weight="1"
-                android:text="Support" />
+                android:text="Hồ sơ" />
 
             <ImageView
                 android:id="@+id/imageView23"
