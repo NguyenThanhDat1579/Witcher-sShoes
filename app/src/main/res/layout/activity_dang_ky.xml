@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                     android:id="@+id/edtUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="jonh doe"
+                    android:hint="user name"
                     android:maxLines="1"
                     android:background="#F0F5FA"
                     android:layout_marginBottom="10dp"/>
@@ -141,7 +141,7 @@
                     android:id="@+id/edtAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="example@gmail.com"
+                    android:hint="123, abs street"
                     android:background="#F0F5FA"
                     android:layout_marginBottom="10dp"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -252,4 +252,4 @@
                 android:text="Đăng nhập" />
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
