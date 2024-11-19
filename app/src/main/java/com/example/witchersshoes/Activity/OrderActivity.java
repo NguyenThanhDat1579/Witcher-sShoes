@@ -33,8 +33,10 @@ public class OrderActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderActivity.this, MainActivity.class);
-                startActivity(intent);
+                Intent i = new Intent(OrderActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
             }
         });
     }
