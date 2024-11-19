@@ -23,6 +23,7 @@ import java.util.List;
 public class PaymentDetailAdapter extends RecyclerView.Adapter<PaymentDetailAdapter.PaymentDetailViewHolder> {
     private Context context;
     private List<ProductModel> cartItems;
+
 //    private CartUpdateListener cartUpdateListener;
     private FirebaseFirestore db;
     private String khachHangID; // Interface để cập nhật tổng giá

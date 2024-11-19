@@ -111,11 +111,11 @@ public class CartActivity extends AppCompatActivity {
                             calculateCartTotal();
 
                             // Hiển thị thông báo nếu giỏ hàng trống
-                            if (cartItems.isEmpty()) {
-                                Toast.makeText(CartActivity.this,
-                                        "Giỏ hàng của bạn đang trống", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(CartActivity.this, MainActivity.class));
-                            }
+//                            if (cartItems.isEmpty()) {
+//                                Toast.makeText(CartActivity.this,
+//                                        "Giỏ hàng của bạn đang trống", Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent(CartActivity.this, MainActivity.class));
+//                            }
                         }
                     });
         } else {

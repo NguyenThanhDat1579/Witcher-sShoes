@@ -1,5 +1,6 @@
 package com.example.witchersshoes.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,12 +23,17 @@ import com.example.witchersshoes.Adapter.PaymentDetailAdapter;
 import com.example.witchersshoes.Model.Customer;
 import com.example.witchersshoes.Model.ProductModel;
 import com.example.witchersshoes.R;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Date;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PaymentDetailActivity extends AppCompatActivity {
 
@@ -36,8 +42,10 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private Button btnOrder;
     private TextView txtName, txtPhone, txtLocation, totalFeeTxt, taxTxt, deliveryTxt, totalTxt;
     private PaymentDetailAdapter paymentDetailAdapter;
+    private CartAdapter cartAdapter;
     private List<ProductModel> cartItems = new ArrayList<>();
     private double totalFee = 0;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -69,6 +77,13 @@ public class PaymentDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PaymentDetailActivity.this, CartActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processCheckout();
             }
         });
 
@@ -158,6 +173,95 @@ public class PaymentDetailActivity extends AppCompatActivity {
         }
 
     }
+
+    private void processCheckout() {
+        // Lấy thông tin người dùng hiện tại
+        SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
+        String khachHangID = preferences.getString("khachHangID", null);
+        String tenKhachHang = preferences.getString("tenKhachHang",null);
+        String diaChi = preferences.getString("diaChi",null);
+        String soDienThoai = preferences.getString("soDienThoai",null);
+
+        if (khachHangID == null) {
+            Toast.makeText(this, "Vui lòng đăng nhập để thanh toán", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Tham chiếu đến collections
+        CollectionReference orderCollection = db.collection("KhachHang").document(khachHangID).collection("Orders");
+        CollectionReference cartCollection = db.collection("KhachHang").document(khachHangID).collection("Cart");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang xử lí đơn hàng của bạn...");
+        progressDialog.setCancelable(false); // Ngăn người dùng tắt dialog bằng cách bấm bên ngoài
+        progressDialog.show(); // Hiển thị dialog
+
+        // Bắt đầu transaction ( giao dịch )
+        db.runTransaction(transaction -> {
+            // Tạo document order mới
+            Map<String, Object> orderData = new HashMap<>();
+
+            // Tạo danh sách các sản phẩm
+            List<Map<String, Object>> products = new ArrayList<>();
+            double totalAmount = 0;
+
+            // Thêm từng sản phẩm vào danh sách
+            for (ProductModel cartItem : cartItems) {
+                Map<String, Object> productData = new HashMap<>();
+                productData.put("productID", cartItem.getID());
+                productData.put("productName", cartItem.getTitle());
+                productData.put("quantity", cartItem.getNumberInCart());
+                productData.put("price", cartItem.getPrice());
+                productData.put("imageUrl", cartItem.getPicUrl());
+
+                // Tính tổng tiền của đơn hàng
+                totalAmount += cartItem.getPrice() * cartItem.getNumberInCart();
+
+                products.add(productData);
+            }
+
+            // Thêm thông tin vào đơn hàng
+            orderData.put("products", products);  // Danh sách sản phẩm
+            orderData.put("totalAmount", totalAmount);  // Tổng tiền
+            orderData.put("createdAt", new Timestamp(new Date()));  // Thời gian tạo
+            orderData.put("status", "Chờ xác nhận");  // Trạng thái đơn hàng
+            orderData.put("customerID", khachHangID);  // ID khách hàng
+            orderData.put("customerName",tenKhachHang);
+            orderData.put("customerPhone",soDienThoai);
+            orderData.put("customerAddress",diaChi);
+
+
+
+            // Tạo một document mới trong collection Orders
+            orderCollection.add(orderData);
+
+            // Xóa tất cả items trong Cart
+            for (ProductModel cartItem : cartItems) {
+                cartCollection.document(cartItem.getID()).delete();
+            }
+//
+            return null;
+        }).addOnSuccessListener(aVoid -> {
+            // Xử lý khi thanh toán thành công
+            progressDialog.dismiss();
+            cartItems.clear();
+            paymentDetailAdapter.notifyDataSetChanged();
+            calculateCartTotal();
+
+//          Chuyển đến màn hình đơn hàng
+            Intent intent = new Intent(PaymentDetailActivity.this, OrderActivity.class);
+            startActivity(intent);
+            finish();
+        }).addOnFailureListener(e -> {
+            // Xử lý khi có lỗi xảy ra
+            progressDialog.dismiss();
+            Toast.makeText(this, "Lỗi khi đặt hàng: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        });
+    }
+
+
 
     private void calculateCartTotal() {
         totalFee = 0;

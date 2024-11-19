@@ -7,6 +7,10 @@ import android.os.CountDownTimer;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,7 +23,9 @@ import com.example.witchersshoes.R;
 
 public class ManHinhChaoActivity extends AppCompatActivity {
     TextView txtIntro;
-
+    LinearLayout mainLayout;
+    ProgressBar loading;
+    Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,8 @@ public class ManHinhChaoActivity extends AppCompatActivity {
         });
 
         txtIntro = findViewById(R.id.txtIntro);
+        mainLayout = findViewById(R.id.main);
+        btnLogin = findViewById(R.id.btnLogin);
         String text = "Thỏa Mãn Cơn Thèm Của Bạn Với Bánh Tươi, Donut, và Bánh Ngọt";
         // Tạo SpannableString để áp dụng màu
         SpannableString spannableString = new SpannableString(text);
@@ -49,7 +57,6 @@ public class ManHinhChaoActivity extends AppCompatActivity {
         txtIntro.setText(spannableString);
 
 
-
         // đếm ngược trước khi chuyển activity
         CountDownTimer timer = new CountDownTimer(3000,1000) {
             @Override
@@ -63,5 +70,9 @@ public class ManHinhChaoActivity extends AppCompatActivity {
                 finish(); // một đi không trở lại
             }
         }.start();
+
+
+
+
     }
 }

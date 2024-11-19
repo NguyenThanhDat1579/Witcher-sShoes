@@ -52,6 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="jonh doe"
+                    android:maxLines="1"
                     android:background="#F0F5FA"
                     android:layout_marginBottom="10dp"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -81,6 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="example@gmail.com"
+                    android:maxLines="1"
                     android:background="#F0F5FA"
                     android:layout_marginBottom="10dp"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -173,6 +175,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="●●●●●●●●●●"
+                    android:maxLines="1"
                     android:background="#F0F5FA"
                     android:inputType="textPassword"
                     android:layout_marginBottom="10dp"/>
@@ -205,6 +208,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="●●●●●●●●●"
+                    android:maxLines="1"
                     android:background="#F0F5FA"
                     android:inputType="textPassword"
                     android:layout_marginBottom="10dp"/>

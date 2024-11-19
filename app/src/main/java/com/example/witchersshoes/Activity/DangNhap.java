@@ -1,32 +1,46 @@
 package com.example.witchersshoes.Activity;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.witchersshoes.R;
+import com.example.witchersshoes.SendMail;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.Random;
 
 public class DangNhap extends AppCompatActivity {
     FirebaseFirestore db;
     TextInputLayout emailInputLayout, passInputLayout;
     TextInputEditText edtEmail, edtPassword;
     Button btnLogin, btnRegister;
+    TextView txtFogotPass;
     CheckBox chkGhiNhoTk;
+    SendMail sendMail;
 
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +54,12 @@ public class DangNhap extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         chkGhiNhoTk = findViewById(R.id.chkGhiNhoTk);
+        txtFogotPass = findViewById(R.id.txtFogotPass);
 
         db = FirebaseFirestore.getInstance();
-
-        // Kiểm tra nếu có thông tin ghi nhớ tài khoản
-        loadSavedLoginInfo();
+        sendMail = new SendMail();
+        // Kiểm tra đăng nhập đã lưu
+        checkSavedLoginInfo();
 
         btnLogin.setOnClickListener(v -> {
             String email = edtEmail.getText().toString();
@@ -77,9 +92,16 @@ public class DangNhap extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        txtFogotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCustomDialog();
+            }
+        });
     }
 
-    private void loadSavedLoginInfo() {
+    private void checkSavedLoginInfo() {
         SharedPreferences sharedPreferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
         boolean isRemember = sharedPreferences.getBoolean("isRemember", false);
 
@@ -89,10 +111,15 @@ public class DangNhap extends AppCompatActivity {
             edtEmail.setText(savedEmail);
             edtPassword.setText(savedPassword);
             chkGhiNhoTk.setChecked(true);
+
+            // Tự động đăng nhập
+            checkLogin(savedEmail, savedPassword);
         }
     }
 
-    private void checkLogin(String username, String password){
+
+
+    private void checkLogin(String username, String password) {
         // Tạo ProgressDialog
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang kiểm tra thông tin đăng nhập...");
@@ -107,11 +134,13 @@ public class DangNhap extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     // Ẩn dialog khi có kết quả
                     progressDialog.dismiss();
-                    if(!queryDocumentSnapshots.isEmpty()){
+                    if (!queryDocumentSnapshots.isEmpty()) {
                         for (DocumentSnapshot document : queryDocumentSnapshots) {
                             // Lấy trường 'tenKhachHang' từ tài liệu
                             String tenKhachHang = document.getString("tenKhachHang");
                             String id = document.getId(); // Lấy ID khách hàng từ Firestore
+                            String diaChi = document.getString("diaChi");
+                            String soDienThoai = document.getString("soDienThoai");
 
                             // Lưu thông tin đăng nhập vào SharedPreferences nếu checkbox được chọn
                             SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
@@ -128,9 +157,11 @@ public class DangNhap extends AppCompatActivity {
                                 editor.remove("password");
                             }
                             editor.putString("khachHangID", id); // Lưu ID khách hàng
+                            editor.putString("tenKhachHang",tenKhachHang);
+                            editor.putString("diaChi",diaChi);
+                            editor.putString("soDienThoai",soDienThoai);
 //                            Toast.makeText(this, "khachHangID: "+ id, Toast.LENGTH_SHORT).show();
                             editor.apply();
-
 
 
                             Intent intent = new Intent(DangNhap.this, MainActivity.class);
@@ -138,10 +169,81 @@ public class DangNhap extends AppCompatActivity {
                             intent.putExtra("khachHangID", id);
                             startActivity(intent);
                         }
-                    }
-                    else{
+                    } else {
                         Toast.makeText(this, "Email hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+    public void checkIfEmailExistsInFirestore(String email) {
+        db.collection("KhachHang")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        boolean emailExists = false;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            emailExists = true;
+                            break;
+                        }
+                        if (emailExists) {
+                            String otp = generateOtp();
+                            sendMail.Send(DangNhap.this, email, "Xác thực", "Mã OTP là "+otp);
+                            Intent intent = new Intent(DangNhap.this, OtpActivity.class);
+                            intent.putExtra("otpPass", otp); // Truyền otp sang OtpActivity
+                            intent.putExtra("emailFogot", email);
+                            startActivity(intent);
+
+
+                        } else {
+                            emailInputLayout.setError("Email không tồn tại"); // Xóa lỗi nếu email chưa tồn tại
+
+                        }
+                    } else {
+                        Toast.makeText(DangNhap.this, "Thất bại khi kiểm tra email", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    private void showCustomDialog() {
+        // Tạo View từ layout custom_dialog.xml
+        Dialog dialog  =  new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fogot_pass);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        // Khởi tạo các phần tử trong dialog (nếu cần thiết)
+        TextView test;
+        TextInputEditText edtEmail = dialog.findViewById(R.id.edtEmail);
+        TextInputLayout emailInputLayout = dialog.findViewById(R.id.emailInputLayout);
+        Button btn = dialog.findViewById(R.id.btn);
+
+
+
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = edtEmail.getText().toString().trim();
+                checkIfEmailExistsInFirestore(email);
+            }
+        });
+
+
+
+
+
+        dialog.show();
+    }
+
+
+
+    // Hàm tạo mã OTP ngẫu nhiên 4 chữ số
+    public String generateOtp() {
+        Random random = new Random();
+        int otp = 1000 + random.nextInt(9000);  // Tạo số ngẫu nhiên trong khoảng 1000 đến 9999
+        return String.valueOf(otp);
+    }
+
 }
