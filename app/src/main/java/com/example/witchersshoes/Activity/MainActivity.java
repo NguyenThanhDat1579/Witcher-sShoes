@@ -88,6 +88,10 @@ public class MainActivity extends BaseActivity {
         binding.orderBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, OrderDetailActivity.class));
         });
+
+        binding.profileBtn.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+        });
     }
 
     private void initBestSeller() {

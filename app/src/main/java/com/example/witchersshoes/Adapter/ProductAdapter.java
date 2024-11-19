@@ -26,7 +26,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        public ImageView productImage;
+        public ImageView productImage, favBtn;
         public TextView productName;
         public TextView productPrice;
         public Button addToCartButton;
@@ -37,6 +37,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
             addToCartButton = itemView.findViewById(R.id.addToCartButton);
+            favBtn = itemView.findViewById(R.id.favBtn);
         }
     }
 
