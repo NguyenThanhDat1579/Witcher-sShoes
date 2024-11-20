@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -105,7 +106,24 @@ public class OrderDetailActivity extends AppCompatActivity {
 
                             ordersList.add(order);
                         }
-                        orderAdapter.notifyDataSetChanged();
+                        updateUI();
                     }
                 });
-    }}
+    }
+
+    private void updateUI() {
+        TextView emptyTxt = findViewById(R.id.emptyTxt);
+        RecyclerView rvOrders = findViewById(R.id.rvOrders);
+
+        if (ordersList.isEmpty()) {
+            emptyTxt.setVisibility(View.VISIBLE);
+            rvOrders.setVisibility(View.GONE);
+        } else {
+            emptyTxt.setVisibility(View.GONE);
+            rvOrders.setVisibility(View.VISIBLE);
+        }
+        orderAdapter.notifyDataSetChanged();
+    }
+
+}
+
