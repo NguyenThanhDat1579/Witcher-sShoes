@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.witchersshoes.Adapter.CartAdapter;
 import com.example.witchersshoes.Model.ProductModel;
 import com.example.witchersshoes.R;
-import com.example.witchersshoes.databinding.ActivityCartBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -100,6 +99,8 @@ public class CartActivity extends AppCompatActivity {
                             }
 
                             // Cập nhật UI
+                            updateCartUI();
+
                             if (cartAdapter == null) {
                                 cartAdapter = new CartAdapter(CartActivity.this, cartItems,
                                         CartActivity.this::calculateCartTotal);
@@ -110,12 +111,6 @@ public class CartActivity extends AppCompatActivity {
 
                             calculateCartTotal();
 
-                            // Hiển thị thông báo nếu giỏ hàng trống
-//                            if (cartItems.isEmpty()) {
-//                                Toast.makeText(CartActivity.this,
-//                                        "Giỏ hàng của bạn đang trống", Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(CartActivity.this, MainActivity.class));
-//                            }
                         }
                     });
         } else {
@@ -126,6 +121,47 @@ public class CartActivity extends AppCompatActivity {
         }
     }
 
+    private void updateCartUI() {
+        TextView emptyTxt = findViewById(R.id.emptyTxt);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+
+        if (cartItems.isEmpty()) {
+            // Hiển thị TextView giỏ hàng trống và ẩn các thành phần khác
+            findViewById(R.id.emptyTxt).setVisibility(View.VISIBLE);
+            findViewById(R.id.cartView).setVisibility(View.GONE);
+            findViewById(R.id.discountEdt).setVisibility(View.GONE);
+            findViewById(R.id.discountLayout).setVisibility(View.GONE);
+            findViewById(R.id.discountBtn).setVisibility(View.GONE);
+            findViewById(R.id.totalFeeText).setVisibility(View.GONE);
+            findViewById(R.id.deliveryText).setVisibility(View.GONE);
+            findViewById(R.id.taxText).setVisibility(View.GONE);
+            findViewById(R.id.deliveryTxt).setVisibility(View.GONE);
+            findViewById(R.id.taxTxt).setVisibility(View.GONE);
+            findViewById(R.id.totalFeeTxt).setVisibility(View.GONE);
+            findViewById(R.id.view).setVisibility(View.GONE);
+            findViewById(R.id.totalText).setVisibility(View.GONE);
+            findViewById(R.id.totalTxt).setVisibility(View.GONE);
+            findViewById(R.id.btnPayment).setVisibility(View.GONE);
+        } else {
+            // Hiển thị giỏ hàng và các thành phần khác
+            findViewById(R.id.emptyTxt).setVisibility(View.GONE);
+            findViewById(R.id.cartView).setVisibility(View.VISIBLE);
+            findViewById(R.id.discountEdt).setVisibility(View.VISIBLE);
+            findViewById(R.id.discountLayout).setVisibility(View.VISIBLE);
+            findViewById(R.id.discountBtn).setVisibility(View.VISIBLE);
+            findViewById(R.id.totalFeeText).setVisibility(View.VISIBLE);
+            findViewById(R.id.deliveryText).setVisibility(View.VISIBLE);
+            findViewById(R.id.taxText).setVisibility(View.VISIBLE);
+            findViewById(R.id.deliveryTxt).setVisibility(View.VISIBLE);
+            findViewById(R.id.taxTxt).setVisibility(View.VISIBLE);
+            findViewById(R.id.totalFeeTxt).setVisibility(View.VISIBLE);
+            findViewById(R.id.view).setVisibility(View.VISIBLE);
+            findViewById(R.id.totalText).setVisibility(View.VISIBLE);
+            findViewById(R.id.totalTxt).setVisibility(View.VISIBLE);
+            findViewById(R.id.btnPayment).setVisibility(View.VISIBLE);
+        }
+    }
+
     private void calculateCartTotal() {
         totalFee = 0;
         for (ProductModel item : cartItems) {
@@ -133,10 +169,12 @@ public class CartActivity extends AppCompatActivity {
         }
 
         double tax = totalFee * 0.1; // Thuế 10%
+        String formattedTax = String.format("%.1f", tax);
+        formattedTax = formattedTax.replace(",", ".");
         double deliveryFee = 20; // Phí vận chuyển cố định
 
         totalFeeTxt.setText(totalFee+"00₫");
-        taxTxt.setText(tax+"00₫");
+        taxTxt.setText(formattedTax+"00₫");
         deliveryTxt.setText(deliveryFee+"00₫");
         totalTxt.setText((totalFee + tax + deliveryFee)+"00₫");
     }

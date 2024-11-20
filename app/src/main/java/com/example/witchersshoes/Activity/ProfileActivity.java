@@ -23,7 +23,7 @@ import android.content.DialogInterface;
 public class ProfileActivity extends AppCompatActivity {
 
     TextView txtName, txtEmail;
-    LinearLayout khamPha, gioHang, yeuThich, donHang, hoSo;
+    LinearLayout khamPha, gioHang, yeuThich, donHang, hoSo, exploreBtn, cartBtn, favoriteBtn, orderBtn, profileBtn;
     Button logoutBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,13 @@ public class ProfileActivity extends AppCompatActivity {
         donHang = findViewById(R.id.order);
         hoSo = findViewById(R.id.profile);
 
+        exploreBtn = findViewById(R.id.exploreBtn);
+        cartBtn = findViewById(R.id.cartBtn);
+        favoriteBtn = findViewById(R.id.favoriteBtn);
+        orderBtn = findViewById(R.id.orderBtn);
+        profileBtn = findViewById(R.id.profileBtn);
+
+
         SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
         String khachHangID = preferences.getString("khachHangID", null);
 
@@ -51,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this, MainActivity.class);
                 startActivity(i);
+                finish();
             }
         });
         gioHang.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this, CartActivity.class);
                 startActivity(i);
+                finish();
             }
         });
         yeuThich.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this, FavoriteActivity.class);
                 startActivity(i);
+                finish();
             }
         });
         donHang.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this,OrderDetailActivity.class);
                 startActivity(i);
+                finish();
             }
         });
         hoSo.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +90,49 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
                 startActivity(i);
+                finish();
+            }
+        });
+
+
+        exploreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ProfileActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        cartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ProfileActivity.this, CartActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        favoriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ProfileActivity.this, FavoriteActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        orderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ProfileActivity.this,OrderDetailActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
+                startActivity(i);
+                finish();
             }
         });
 

@@ -2,12 +2,14 @@ package com.example.witchersshoes.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +36,7 @@ public class MainActivity extends BaseActivity {
     private BestSellerAdapter bestSellerAdapter;
     private ActivityMainBinding binding;
     private MainViewModel viewModel = new MainViewModel();
+    private boolean isBackPressedOnce = false;
     TextView txtName;
 
     @Override
@@ -70,22 +73,43 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private void bottomNavigation() {
-        binding.cartBtn.setOnClickListener(v -> {
+    @Override
+    public void onBackPressed() {
+        if (isBackPressedOnce) {
+            // Nếu nhấn lại lần nữa, thoát ứng dụng
+            finishAffinity();
+        } else {
+            // Hiển thị thông báo
+            isBackPressedOnce = true;
+            Toast.makeText(this, "Nhấn lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show();
 
+            // Đặt lại trạng thái sau 2 giây
+            new Handler().postDelayed(() -> isBackPressedOnce = false, 2000);
+        }
+    }
+
+    private void bottomNavigation() {
+        binding.exploreBtn.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
+            finish();
+        });
+        binding.cartBtn.setOnClickListener(v -> {
                 startActivity(new Intent(MainActivity.this, CartActivity.class));
 
         });
         binding.favoriteBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, FavoriteActivity.class));
+
         });
 
         binding.orderBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, OrderDetailActivity.class));
+
         });
 
         binding.profileBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+
         });
     }
 
