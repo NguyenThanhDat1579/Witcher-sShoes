@@ -15,19 +15,17 @@
         android:theme="@style/Theme.WitchersShoes"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ProfileActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".Activity.OrderDetailActivity"
-            android:exported="true" >
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".Activity.OrderActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.FavoriteActivity"
             android:exported="false" />
@@ -44,7 +42,7 @@
             android:name=".Activity.CartActivity"
             android:exported="true" />
         <activity
-            android:name=".Activity.DangKy"
+            android:name=".Activity.ManHinhChaoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,7 +51,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Activity.OtpActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.ChangePassActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.DangNhap"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.DangKy"
             android:exported="false" />
         <activity
             android:name=".Activity.MainActivity"

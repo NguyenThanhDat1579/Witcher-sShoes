@@ -125,6 +125,7 @@
             android:textColor="#F61100"
             android:textStyle="bold"
             android:gravity="center"
+            android:textSize="17sp"
             android:text="Gửi lại mã OTP"
             android:layout_marginTop="15dp"
             />

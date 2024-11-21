@@ -21,18 +21,20 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.witchersshoes.Model.Customer;
 import com.example.witchersshoes.R;
 import com.example.witchersshoes.SendMail;
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class OtpActivity extends AppCompatActivity {
     TextView txtEmail, txtReOtp;
     Button btn_verify;
-    FirebaseAuth auth;
     EditText otp1, otp2, otp3, otp4;
     SendMail sendMail;
+    String otpRE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class OtpActivity extends AppCompatActivity {
         otp3 = findViewById(R.id.otp3);
         otp4 = findViewById(R.id.otp4);
         btn_verify = findViewById(R.id.btn_verify);
-        auth = FirebaseAuth.getInstance();
+
         sendMail = new SendMail();
         // Tự động chuyển focus giữa các ô OTP
         setOtpFocus(otp1, otp2, null); // Ô đầu tiên, không có previous
@@ -75,10 +77,11 @@ public class OtpActivity extends AppCompatActivity {
                         + otp3.getText().toString().trim()
                         + otp4.getText().toString().trim();
 
-                 if(otp.equals(otpFogotPass)){
+                 if(otp.equals(otpFogotPass) || otp.equals(otpRE)){
                     Intent intent = new Intent(OtpActivity.this, ChangePassActivity.class);
                     intent.putExtra("email", emailFogot);
                     startActivity(intent);
+                    finish();
                 } else{
                     Toast.makeText(OtpActivity.this, "Sai mã OTP", Toast.LENGTH_SHORT).show();
                 }
@@ -89,7 +92,8 @@ public class OtpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    sendMail.Send(OtpActivity.this, emailFogot, "Xác thực", "Mã OTP là " + otpFogotPass);
+                    otpRE = generateOtp();
+                    sendMail.Send(OtpActivity.this, emailFogot, "Xác thực", "Mã OTP là " + otpRE);
                     startCountdown();
                 } catch (Exception e) {
                     Toast.makeText(OtpActivity.this, "Gửi email thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -155,6 +159,13 @@ public class OtpActivity extends AppCompatActivity {
                 txtReOtp.setText("Gửi lại OTP");
             }
         }.start();
+    }
+
+    // Hàm tạo mã OTP ngẫu nhiên 4 chữ số
+    public String generateOtp() {
+        Random random = new Random();
+        int otp = 1000 + random.nextInt(9000);  // Tạo số ngẫu nhiên trong khoảng 1000 đến 9999
+        return String.valueOf(otp);
     }
 
 

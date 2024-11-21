@@ -33,8 +33,8 @@ import java.util.Random;
 
 public class DangNhap extends AppCompatActivity {
     FirebaseFirestore db;
-    TextInputLayout emailInputLayout, passInputLayout;
-    TextInputEditText edtEmail, edtPassword;
+    TextInputLayout emailInputLayout, passInputLayout, emailFogotInputLayout;
+    TextInputEditText edtEmail, edtPassword, edtFogotEmail;
     Button btnLogin, btnRegister;
     TextView txtFogotPass;
     CheckBox chkGhiNhoTk;
@@ -175,6 +175,65 @@ public class DangNhap extends AppCompatActivity {
                 });
     }
 
+
+    private void showCustomDialog() {
+        // Tạo View từ layout custom_dialog.xml
+        Dialog dialog  =  new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fogot_pass);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        // Khởi tạo các phần tử trong dialog (nếu cần thiết)
+        edtFogotEmail = dialog.findViewById(R.id.edtFogotEmail);
+        emailFogotInputLayout = dialog.findViewById(R.id.emailFogotInputLayout);
+        Button btn = dialog.findViewById(R.id.btn);
+        // Ánh xạ nút btnClose
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+
+        // Set sự kiện OnClickListener
+        btnClose.setOnClickListener(v -> {
+            // Đóng Dialog
+            dialog.dismiss();
+        });
+
+
+
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = edtFogotEmail.getText().toString().trim();
+
+
+                // Kiểm tra tính hợp lệ của email
+                if (email.isEmpty()) {
+                    emailFogotInputLayout.setError("Email không được để trống");
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailFogotInputLayout.setError("Email không hợp lệ");
+                } else {
+                    // Xóa lỗi nếu email hợp lệ
+                    emailFogotInputLayout.setError(null);
+
+                    btn.setEnabled(false); // Khóa nút ngay khi nhấn
+                    btn.setText("Đang xử lý...");
+
+                    // Kiểm tra email trên Firestore
+                    checkIfEmailExistsInFirestore(email);
+
+                    // Khóa nút trong 3 giây
+                    new android.os.Handler().postDelayed(() -> {
+                        btn.setEnabled(true); // Mở lại nút
+                        btn.setText("Xác nhận"); // Trả về text ban đầu
+                    }, 3000);
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+
     public void checkIfEmailExistsInFirestore(String email) {
         db.collection("KhachHang")
                 .whereEqualTo("email", email)
@@ -196,7 +255,7 @@ public class DangNhap extends AppCompatActivity {
 
 
                         } else {
-                            emailInputLayout.setError("Email không tồn tại"); // Xóa lỗi nếu email chưa tồn tại
+                            emailFogotInputLayout.setError("Email không tồn tại"); // Xóa lỗi nếu email chưa tồn tại
 
                         }
                     } else {
@@ -204,37 +263,6 @@ public class DangNhap extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    private void showCustomDialog() {
-        // Tạo View từ layout custom_dialog.xml
-        Dialog dialog  =  new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_fogot_pass);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        // Khởi tạo các phần tử trong dialog (nếu cần thiết)
-        TextView test;
-        TextInputEditText edtEmail = dialog.findViewById(R.id.edtEmail);
-        TextInputLayout emailInputLayout = dialog.findViewById(R.id.emailInputLayout);
-        Button btn = dialog.findViewById(R.id.btn);
-
-
-
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = edtEmail.getText().toString().trim();
-                checkIfEmailExistsInFirestore(email);
-            }
-        });
-
-
-
-
-
-        dialog.show();
     }
 
 
