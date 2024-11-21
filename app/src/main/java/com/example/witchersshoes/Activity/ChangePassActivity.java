@@ -56,8 +56,27 @@ public class ChangePassActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String newPass = edtPassword.getText().toString().trim();
-                    updatePassword(email, newPass);
+                String rePass = edtRePassword.getText().toString().trim();
+                // Kiểm tra mật khẩu
+                if (newPass.isEmpty()) {
+                    edtPassword.setError("Mật khẩu không được để trống");
+                    edtPassword.requestFocus();
+                    return;
+                }
+
+
+                if (!newPass.equals(rePass)) {
+                    edtRePassword.setError("Mật khẩu nhập lại không khớp");
+                    edtRePassword.requestFocus();
+                    return;
+                }
+
+                // Nếu tất cả kiểm tra đều vượt qua, tiến hành cập nhật mật khẩu
+                updatePassword(email, newPass);
+                startActivity(new Intent(ChangePassActivity.this, DangNhap.class));
+                finish();
             }
+
         });
     }
     private void updatePassword(String email, String newPassword) {
