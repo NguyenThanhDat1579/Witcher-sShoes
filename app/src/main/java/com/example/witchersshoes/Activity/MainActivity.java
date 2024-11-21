@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.MarginPageTransformer;
 
 import com.example.witchersshoes.Adapter.BestSellerAdapter;
 import com.example.witchersshoes.Adapter.CategoryAdapter;
+import com.example.witchersshoes.Adapter.SeeMoreProductAdapter;
 import com.example.witchersshoes.Adapter.SliderAdapter;
 import com.example.witchersshoes.Model.Customer;
 import com.example.witchersshoes.Model.FavoriteEvent;
@@ -68,6 +69,20 @@ public class MainActivity extends BaseActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         View decor = window.getDecorView();
         decor.setSystemUiVisibility(0);
+
+        binding.seemoreproductBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SeeMoreProductActivity.class));
+            }
+        });
+
+        binding.seemorecategoryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SeeMoreCategoryActivity.class));
+            }
+        });
 
     }
 

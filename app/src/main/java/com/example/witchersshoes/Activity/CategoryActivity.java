@@ -72,6 +72,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     }
 
+
     public void loadBestSeller() {
         CollectionReference ref = firestore.collection("Products");
         ref.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -88,12 +89,20 @@ public class CategoryActivity extends AppCompatActivity {
                 titleProCatTxt.setText(title);
                 for (QueryDocumentSnapshot document : snapshot) {
                     try {
+                        // Chuyển dữ liệu từ document sang ProductModel
                         ProductModel list = document.toObject(ProductModel.class);
-                        String documentId = document.getId();
-                        list.setID(documentId);
-                        Log.d("ProductModel", "Title: " + list.getTitle() + ", Price: " + list.getPrice());
-                        if (categoryID != null && categoryID.equals(documentId)) {
-                            filterList.add(list);
+
+                        // Lấy DocumentReference từ document
+                        DocumentReference documentCategoryRef = document.getDocumentReference("categoryID"); // Thay "categoryID" bằng tên thực tế của trường trong Firestore
+
+                        if (documentCategoryRef != null) {
+                            String documentCategoryId = documentCategoryRef.getId(); // Lấy ID của DocumentReference
+                            String documentId = document.getId();
+                            Log.d("category", "Document Category ID: " + documentCategoryId);
+                            list.setID(documentId);
+                            if (categoryID != null && categoryID.equals(documentCategoryId)) {
+                                filterList.add(list);
+                            }
                         }
                     } catch (Exception e) {
                         Log.e("Data Parsing Error", e.getMessage());
@@ -103,6 +112,8 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
     }
+
+
     private void setVariable() {
         backBtn.setOnClickListener(v -> startActivity(new Intent(CategoryActivity.this, MainActivity.class)));
 

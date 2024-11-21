@@ -15,14 +15,18 @@
         android:theme="@style/Theme.WitchersShoes"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.SeeMoreCategoryActivity"
             android:exported="false" />
         <activity
+            android:name=".Activity.SeeMoreProductActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".Activity.ProfileActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.OrderDetailActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.OrderActivity"
             android:exported="true" />
