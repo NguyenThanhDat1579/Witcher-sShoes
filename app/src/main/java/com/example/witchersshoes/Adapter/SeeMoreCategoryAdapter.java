@@ -13,22 +13,23 @@ import com.bumptech.glide.Glide;
 import com.example.witchersshoes.Activity.CategoryActivity;
 import com.example.witchersshoes.Model.CategoryModel;
 import com.example.witchersshoes.databinding.ViewholderCategoryBinding;
+import com.example.witchersshoes.databinding.ViewholderSeemoreCategoryBinding;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class SeeMoreCategoryAdapter extends RecyclerView.Adapter<SeeMoreCategoryAdapter.ViewHolder> {
 
     private List<CategoryModel> items;
     private Context context;
 
-    public CategoryAdapter(List<CategoryModel> items) {
+    public SeeMoreCategoryAdapter(List<CategoryModel> items) {
         this.items = items;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewholderCategoryBinding binding = ViewholderCategoryBinding.inflate(LayoutInflater.from(parent.getContext()),
+        ViewholderSeemoreCategoryBinding binding = ViewholderSeemoreCategoryBinding.inflate(LayoutInflater.from(parent.getContext()),
                 parent, false);
         return new ViewHolder(binding);
     }
@@ -58,12 +59,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return Math.min(items.size(), 5);
+        return items.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ViewholderCategoryBinding binding;
-        public ViewHolder(ViewholderCategoryBinding binding) {
+        ViewholderSeemoreCategoryBinding binding;
+        public ViewHolder(ViewholderSeemoreCategoryBinding binding) {
             super(binding.getRoot());
             this.binding=binding;
         }

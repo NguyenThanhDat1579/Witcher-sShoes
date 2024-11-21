@@ -15,6 +15,16 @@ public class ProductModel implements Serializable {
     private double price;
     private double rating;
 
+    private boolean invisible;
+
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
+    }
+
     private transient DocumentReference categoryID;
 
     public ProductModel() {

@@ -165,7 +165,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/seemorecategoryBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem thêm"
@@ -218,6 +218,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/seemoreproductBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xem thêm"

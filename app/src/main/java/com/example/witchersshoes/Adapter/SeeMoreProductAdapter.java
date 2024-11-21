@@ -26,21 +26,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.ViewHolder> {
+public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAdapter.ViewHolder> {
     private List<ProductModel> items;
     private Context context;
     private FirebaseFirestore db;
     private String khachHangID;
     private boolean isFavoriteList;
 
-    public BestSellerAdapter(List<ProductModel> items) {
+    public SeeMoreProductAdapter(List<ProductModel> items) {
         this.items = items;
         this.isFavoriteList = false;
         this.db = FirebaseFirestore.getInstance();
     }
 
     // Constructor cho màn hình Favorite
-    public BestSellerAdapter(List<ProductModel> items, boolean isFavoriteList) {
+    public SeeMoreProductAdapter(List<ProductModel> items, boolean isFavoriteList) {
         this.items = items;
         this.isFavoriteList = isFavoriteList;
         this.db = FirebaseFirestore.getInstance();
@@ -176,7 +176,7 @@ public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return Math.min(items.size(), 4);
+        return items.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

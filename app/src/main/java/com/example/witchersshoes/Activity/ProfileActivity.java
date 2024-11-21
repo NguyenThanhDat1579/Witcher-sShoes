@@ -42,11 +42,6 @@ public class ProfileActivity extends AppCompatActivity {
         donHang = findViewById(R.id.order);
         hoSo = findViewById(R.id.profile);
 
-        exploreBtn = findViewById(R.id.exploreBtn);
-        cartBtn = findViewById(R.id.cartBtn);
-        favoriteBtn = findViewById(R.id.favoriteBtn);
-        orderBtn = findViewById(R.id.orderBtn);
-        profileBtn = findViewById(R.id.profileBtn);
 
 
         SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
@@ -94,47 +89,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
-        exploreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ProfileActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-        cartBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ProfileActivity.this, CartActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-        favoriteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ProfileActivity.this, FavoriteActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-        orderBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ProfileActivity.this,OrderDetailActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-        profileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
