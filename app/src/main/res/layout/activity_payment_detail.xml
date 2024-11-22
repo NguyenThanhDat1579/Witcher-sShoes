@@ -217,6 +217,16 @@
                         app:buttonTint="@color/brown"
                         android:checked="true"
                         />
+                    <RadioButton
+                        android:id="@+id/radioZaloPay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thanh toán ZaloPay"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="10dp"
+                        app:buttonTint="@color/brown"
+                        android:checked="true"
+                        />
 
 
 

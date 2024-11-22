@@ -88,14 +88,19 @@ public class MainViewModel extends ViewModel {
                     Log.e("Firestore Error", error.getMessage());
                     return;
                 }
+
                 List<ProductModel> lists = new ArrayList<>();
+                lists.clear();
                 for (QueryDocumentSnapshot document : snapshot) {
                     try {
                         ProductModel list = document.toObject(ProductModel.class);
                         String documentId = document.getId();
-                        list.setID(documentId);
-                        Log.d("ProductModel", "Title: " + list.getTitle() + ", Price: " + list.getPrice());
-                        lists.add(list);
+                        Boolean invisible = document.getBoolean("invisible");
+                        if(invisible != true) {
+                            list.setID(documentId);
+                            Log.d("ProductModel", "Title: " + list.getTitle() + ", Price: " + list.getPrice());
+                            lists.add(list);
+                        }
                     } catch (Exception e) {
                         Log.e("Data Parsing Error", e.getMessage());
                     }
