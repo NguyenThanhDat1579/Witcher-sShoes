@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.witchersshoes.Model.Customer;
 import com.example.witchersshoes.R;
@@ -83,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
         hoSo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
+                Intent i = new Intent(ProfileActivity.this, InforActivity.class);
                 startActivity(i);
                 finish();
             }

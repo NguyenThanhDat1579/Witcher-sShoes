@@ -59,7 +59,7 @@ dependencies {
     implementation(files("libs\\additionnal.jar"))
     implementation(files("libs\\mail.jar"))
     implementation(fileTree(mapOf(
-        "dir" to "D:\\ZaloPay",
+        "dir" to "C:\\Users\\phamt\\Downloads\\ZaloPay",
         "include" to listOf("*.aar", "*.jar"),
         "exclude" to listOf("")
     )))

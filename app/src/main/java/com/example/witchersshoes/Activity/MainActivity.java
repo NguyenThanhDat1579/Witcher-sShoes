@@ -96,6 +96,15 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
+        String khachHangID = preferences.getString("khachHangID", null);
+
+        getInfoUser(khachHangID);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         // Hủy đăng ký EventBus
