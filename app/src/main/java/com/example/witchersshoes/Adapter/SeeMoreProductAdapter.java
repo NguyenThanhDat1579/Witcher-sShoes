@@ -1,4 +1,3 @@
-// BestSellerAdapter.java
 package com.example.witchersshoes.Adapter;
 
 import android.content.Context;
@@ -22,26 +21,30 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAdapter.ViewHolder> {
-    private List<ProductModel> items;
+
+    private List<ProductModel> originalItems; // Danh sách gốc
+    private List<ProductModel> filteredItems; // Danh sách được hiển thị
     private Context context;
     private FirebaseFirestore db;
     private String khachHangID;
     private boolean isFavoriteList;
 
     public SeeMoreProductAdapter(List<ProductModel> items) {
-        this.items = items;
+        this.originalItems = new ArrayList<>(items);
+        this.filteredItems = new ArrayList<>(items);
         this.isFavoriteList = false;
         this.db = FirebaseFirestore.getInstance();
     }
 
-    // Constructor cho màn hình Favorite
     public SeeMoreProductAdapter(List<ProductModel> items, boolean isFavoriteList) {
-        this.items = items;
+        this.originalItems = new ArrayList<>(items);
+        this.filteredItems = new ArrayList<>(items);
         this.isFavoriteList = isFavoriteList;
         this.db = FirebaseFirestore.getInstance();
     }
@@ -50,6 +53,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
+
         // Lấy khachHangID từ SharedPreferences
         SharedPreferences preferences = context.getSharedPreferences("THONGTIN", Context.MODE_PRIVATE);
         khachHangID = preferences.getString("khachHangID", null);
@@ -62,9 +66,9 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductModel item = items.get(position);
+        ProductModel item = filteredItems.get(position);
         holder.binding.titleTxt.setText(item.getTitle());
-        holder.binding.priceTxt.setText(item.getPrice()+"00₫");
+        holder.binding.priceTxt.setText(item.getPrice() + "00₫");
         holder.binding.ratingTxt.setText(String.valueOf(item.getRating()));
         holder.binding.txtID.setText(String.valueOf(item.getID()));
 
@@ -73,9 +77,10 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                 .apply(new RequestOptions().transform(new CenterCrop()))
                 .into(holder.binding.picBestSeller);
 
-        // Kiểm tra trạng thái yêu thích và cập nhật UI
+        // Kiểm tra trạng thái yêu thích
         checkFavoriteStatus(item.getID(), holder);
 
+        // Xử lý sự kiện nút yêu thích
         holder.binding.favoriteBtn.setOnClickListener(v -> {
             if (khachHangID == null) {
                 Toast.makeText(context, "Vui lòng đăng nhập để thêm vào yêu thích",
@@ -85,6 +90,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
             toggleFavorite(item, holder);
         });
 
+        // Mở chi tiết sản phẩm khi click
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("object", item);
@@ -100,11 +106,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                     .document(productId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            holder.binding.favoriteBtn.setSelected(true);
-                        } else {
-                            holder.binding.favoriteBtn.setSelected(false);
-                        }
+                        holder.binding.favoriteBtn.setSelected(documentSnapshot.exists());
                     });
         }
     }
@@ -113,7 +115,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
         String productId = item.getID();
 
         if (holder.binding.favoriteBtn.isSelected()) {
-            // Remove from favorites
+            // Xóa khỏi danh sách yêu thích
             db.collection("KhachHang")
                     .document(khachHangID)
                     .collection("Favorite")
@@ -121,15 +123,14 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                     .delete()
                     .addOnSuccessListener(aVoid -> {
                         holder.binding.favoriteBtn.setSelected(false);
-                        Toast.makeText(context, "Đã xóa khỏi danh sách yêu thích",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
 
-                        // Post event khi xóa khỏi yêu thích
+                        // Gửi sự kiện khi xóa khỏi yêu thích
                         EventBus.getDefault().post(new FavoriteEvent(productId, false));
 
                         if (isFavoriteList) {
-                            int pos = items.indexOf(item);
-                            items.remove(pos);
+                            int pos = filteredItems.indexOf(item);
+                            filteredItems.remove(pos);
                             notifyItemRemoved(pos);
                         }
                     })
@@ -137,7 +138,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                             "Lỗi khi xóa khỏi yêu thích: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show());
         } else {
-            // Add to favorites
+            // Thêm vào danh sách yêu thích
             Map<String, Object> favoriteItem = new HashMap<>();
             favoriteItem.put("title", item.getTitle());
             favoriteItem.put("price", item.getPrice());
@@ -152,10 +153,9 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                     .set(favoriteItem)
                     .addOnSuccessListener(aVoid -> {
                         holder.binding.favoriteBtn.setSelected(true);
-                        Toast.makeText(context, "Đã thêm vào danh sách yêu thích",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
 
-                        // Post event khi thêm vào yêu thích
+                        // Gửi sự kiện khi thêm vào yêu thích
                         EventBus.getDefault().post(new FavoriteEvent(productId, true));
                     })
                     .addOnFailureListener(e -> Toast.makeText(context,
@@ -164,22 +164,27 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
         }
     }
 
-    // Thêm method để update trạng thái yêu thích
-    public void updateFavoriteStatus(String productId, boolean isFavorite) {
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getID().equals(productId)) {
-                notifyItemChanged(i);
-                break;
+    // Thêm chức năng lọc
+    public void filter(String query) {
+        filteredItems.clear();
+        if (query.isEmpty()) {
+            filteredItems.addAll(originalItems);
+        } else {
+            for (ProductModel item : originalItems) {
+                if (item.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                    filteredItems.add(item);
+                }
             }
         }
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return filteredItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ViewholderBestSellerBinding binding;
 
         public ViewHolder(ViewholderBestSellerBinding binding) {

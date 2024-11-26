@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="merchantDemo/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/merchantDemo.iml" filepath="$PROJECT_DIR$/.idea/modules/merchantDemo.iml" group="merchantDemo" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zpdk-release/zpdk-release.iml" filepath="$PROJECT_DIR$/.idea/modules/zpdk-release/zpdk-release.iml" group="merchantDemo/zpdk-release" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zpdk-release-4.4.1/zpdk-release-4.4.1.iml" filepath="$PROJECT_DIR$/.idea/modules/zpdk-release-4.4.1/zpdk-release-4.4.1.iml" group="merchantDemo/zpdk-release-4.4.1" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zpdk-sandbox-release-v1/zpdk-sandbox-release-v1.iml" filepath="$PROJECT_DIR$/.idea/modules/zpdk-sandbox-release-v1/zpdk-sandbox-release-v1.iml" group="merchantDemo/zpdk-sandbox-release-v1" />
+    </modules>
+  </component>
+</project>

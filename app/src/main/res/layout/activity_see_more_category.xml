@@ -51,22 +51,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:background="@drawable/grey_bg"
-                    android:drawableStart="@drawable/search_icon"
-                    android:drawablePadding="10dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:hint="Tìm kiếm sản phẩm..."
-                    android:textColor="@color/grey"
-                    android:textSize="16sp" />
+               
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

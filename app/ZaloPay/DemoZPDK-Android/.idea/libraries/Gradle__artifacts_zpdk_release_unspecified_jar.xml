@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: artifacts:zpdk-release:unspecified@jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/zpdk-release/build/.transforms/8e7ddb8f83247ee2e5b9a21d52b344e8/jetified-zpdk-release/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/zpdk-release/build/.transforms/8e7ddb8f83247ee2e5b9a21d52b344e8/jetified-zpdk-release/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
