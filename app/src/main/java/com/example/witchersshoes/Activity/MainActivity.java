@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +50,6 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private MainViewModel viewModel = new MainViewModel();
     private boolean isBackPressedOnce = false;
-    TextView txtName;
     private Handler sliderHandler = new Handler();
     private Runnable sliderRunnable;
 
@@ -61,7 +63,7 @@ public class MainActivity extends BaseActivity {
         // Đăng ký EventBus
         EventBus.getDefault().register(this);
 
-        txtName = findViewById(R.id.txtName);
+
         // Lấy dữ liệu tenKhachHang từ Intent
         SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
         String khachHangID = preferences.getString("khachHangID", null);
@@ -78,6 +80,32 @@ public class MainActivity extends BaseActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         View decor = window.getDecorView();
         decor.setSystemUiVisibility(0);
+
+        binding.edtSearchMain.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                // Lấy từ khóa tìm kiếm
+                String query = binding.edtSearchMain.getText().toString().trim();
+
+                // Kiểm tra nếu từ khóa không trống
+                if (!query.isEmpty()) {
+                    // Chuyển sang activity tìm kiếm với từ khóa
+                    Intent intent = new Intent(MainActivity.this, SeeMoreProductActivity.class);
+                    intent.putExtra("searchQuery", query);
+                    startActivity(intent);
+                    Toast.makeText(this, "Thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Vui lòng nhập từ khóa tìm kiếm", Toast.LENGTH_SHORT).show();
+                }
+                return true; // Để không cần xử lý thêm
+            }
+            return false;
+        });
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(binding.edtSearchMain.getWindowToken(), 0);
+
+
+
 
         binding.seemoreproductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,7 +332,7 @@ public class MainActivity extends BaseActivity {
                         customer.setEmail(documentSnapshot.getString("email"));
 
 
-                        txtName.setText(customer.getUsername());
+                        binding.txtName.setText(customer.getUsername());
 
                     }
                 });

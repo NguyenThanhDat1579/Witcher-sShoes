@@ -29,18 +29,11 @@ import java.util.Map;
 public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAdapter.ViewHolder> {
 
     private List<ProductModel> originalItems; // Danh sách gốc
-    private List<ProductModel> filteredItems; // Danh sách được hiển thị
+    private List<ProductModel> filteredItems; // Danh sách hiển thị
     private Context context;
     private FirebaseFirestore db;
     private String khachHangID;
     private boolean isFavoriteList;
-
-    public SeeMoreProductAdapter(List<ProductModel> items) {
-        this.originalItems = new ArrayList<>(items);
-        this.filteredItems = new ArrayList<>(items);
-        this.isFavoriteList = false;
-        this.db = FirebaseFirestore.getInstance();
-    }
 
     public SeeMoreProductAdapter(List<ProductModel> items, boolean isFavoriteList) {
         this.originalItems = new ArrayList<>(items);
@@ -164,7 +157,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
         }
     }
 
-    // Thêm chức năng lọc
+    // **Cập nhật danh sách khi tìm kiếm**
     public void filter(String query) {
         filteredItems.clear();
         if (query.isEmpty()) {
@@ -176,6 +169,12 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                 }
             }
         }
+
+        // Thông báo nếu không tìm thấy sản phẩm nào
+        if (filteredItems.isEmpty()) {
+            Toast.makeText(context, "Không tìm thấy sản phẩm phù hợp!", Toast.LENGTH_SHORT).show();
+        }
+
         notifyDataSetChanged();
     }
 
@@ -193,3 +192,4 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
         }
     }
 }
+
