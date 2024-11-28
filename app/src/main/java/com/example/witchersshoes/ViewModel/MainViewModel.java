@@ -82,7 +82,7 @@ public class MainViewModel extends ViewModel {
 
     public void loadBestSeller() {
         CollectionReference ref = firestore.collection("Products");
-        ref.orderBy("createAt", Query.Direction.ASCENDING)
+        ref.orderBy("createAt", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot snapshot, FirebaseFirestoreException error) {
