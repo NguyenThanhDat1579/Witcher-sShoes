@@ -35,7 +35,6 @@ android {
         viewBinding = true
     }
 
-
 }
 
 dependencies {
@@ -58,30 +57,11 @@ dependencies {
     implementation(files("libs\\activation.jar"))
     implementation(files("libs\\additionnal.jar"))
     implementation(files("libs\\mail.jar"))
-    implementation(fileTree(mapOf(
-        "dir" to "D:\\android2\\Witcher-sShoes\\app\\ZaloPay",
-        "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
-    )))
-    implementation(fileTree(mapOf(
-        "dir" to "D:\\ZaloPay",
-        "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
-    )))
-    implementation(fileTree(mapOf(
-        "dir" to "C:\\Users\\phamt\\Downloads\\ZaloPay",
-        "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
-    )))
-    implementation(fileTree(mapOf(
-        "dir" to "D:\\Android\\Witcher-sShoes\\app\\ZaloPay",
-        "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
-    )))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.squareup.okhttp3:okhttp:4.6.0")
     implementation("commons-codec:commons-codec:1.14")
 
+    implementation(files("libs\\zpdk-release-v3.1.aar"))
 }

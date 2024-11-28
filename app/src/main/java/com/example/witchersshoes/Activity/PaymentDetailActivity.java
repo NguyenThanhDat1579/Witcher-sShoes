@@ -1,8 +1,12 @@
 package com.example.witchersshoes.Activity;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -60,6 +65,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private RadioButton radioPayment1, radioZaloPay;
     ProgressDialog progressDialog;
 
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,8 @@ public class PaymentDetailActivity extends AppCompatActivity {
         ZaloPaySDK.init(553, Environment.SANDBOX);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PaymentDetailActivity.this, CartActivity.class);
@@ -288,8 +296,6 @@ public class PaymentDetailActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void calculateCartTotal() {
         totalFee = 0;
         for (ProductModel item : cartItems) {
@@ -304,56 +310,45 @@ public class PaymentDetailActivity extends AppCompatActivity {
             deliveryTxt.setText(deliveryFee+"00₫");
             totalTxt.setText((totalFee + tax + deliveryFee)+"00₫");
         }
-
     private void paymentZaloPay() {
+        CreateOrder orderApi = new CreateOrder();
         try {
-            // Hiển thị loading
-
-            // Lấy tổng tiền và xử lý chuỗi
-            String totalAmount = totalTxt.getText().toString()
-                    .replaceAll("[^0-9]", ""); // Chỉ giữ lại số
-
-            Log.d("ZaloPay", "Processing amount: " + totalAmount);
-
-            CreateOrder orderApi = new CreateOrder();
+            // Lấy tổng tiền từ giao diện
+            String totalAmount = String.format("%.0f", totalFee * 1000);
+            Log.d("ZaloPay", "Data from createOrder: " + totalAmount);
+            // Tạo đơn hàng qua API
             JSONObject data = orderApi.createOrder(totalAmount);
-
-            if (data == null) {
-                throw new Exception("Không nhận được phản hồi từ ZaloPay");
-            }
-
-            Log.d("ZaloPay", "ZaloPay response: " + data.toString());
-
-            // Kiểm tra return_code
-            if (!data.has("return_code")) {
-                throw new Exception("Phản hồi không hợp lệ từ ZaloPay");
-            }
-
-            String code = data.getString("return_code");
+            Log.d("ZaloPay", "Data from createOrder: " + data.toString());
+            String code = data.getString("returncode");
             if (code.equals("1")) {
-                String token = data.getString("zp_trans_token");
-                ZaloPaySDK.getInstance().payOrder(this, token, "demozpdk://app", new PayOrderListener() {
+                // Lấy token giao dịch từ API
+                String token = data.getString("zptranstoken");
+                // Gọi thanh toán qua ZaloPay SDK
+                ZaloPaySDK.getInstance().payOrder(this, token, "http://schemas.android.com/apk/res/android", new PayOrderListener() {
                     @Override
                     public void onPaymentSucceeded(String transactionId, String transToken, String appTransID) {
-                        progressDialog.dismiss();
+                        runOnUiThread(() -> new AlertDialog.Builder(PaymentDetailActivity.this)
+                                .setTitle("Payment Success")
+                                .setMessage(String.format("TransactionId: %s\nTransToken: %s", transactionId, transToken))
+                                .setPositiveButton("OK", (dialog, which) -> {})
+                                .setNegativeButton("Cancel", null)
+                                .show());
                     }
 
                     @Override
                     public void onPaymentCanceled(String zpTransToken, String appTransID) {
-                        progressDialog.dismiss();
                         runOnUiThread(() -> Toast.makeText(PaymentDetailActivity.this,
                                 "Bạn đã hủy thanh toán", Toast.LENGTH_SHORT).show());
                     }
 
                     @Override
                     public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransID) {
-                        progressDialog.dismiss();
                         runOnUiThread(() -> Toast.makeText(PaymentDetailActivity.this,
                                 "Lỗi thanh toán: " + zaloPayError.toString(), Toast.LENGTH_SHORT).show());
                     }
                 });
             } else {
-                progressDialog.dismiss();
+                // Xử lý nếu không nhận được mã returncode = "1"
                 String returnMessage = data.optString("return_message", "Unknown error");
                 throw new Exception("ZaloPay error: " + returnMessage);
             }
@@ -363,11 +358,10 @@ public class PaymentDetailActivity extends AppCompatActivity {
         }
     }
 
-
+    // Cần bắt sự kiện onNewIntent vì ZaloPay App sẽ gọi deeplink về app của Merchant
     @Override
-    protected void onNewIntent(Intent intent) {
+    public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         ZaloPaySDK.getInstance().onResult(intent);
     }
-
 }
