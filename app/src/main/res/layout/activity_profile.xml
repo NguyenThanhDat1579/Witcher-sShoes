@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/message" />
+                    app:srcCompat="@drawable/pro_explore" />
 
                 <TextView
                     android:id="@+id/textView21"
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/call" />
+                    app:srcCompat="@drawable/pro_cart" />
 
                 <TextView
                     android:id="@+id/textView34"
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/message" />
+                    app:srcCompat="@drawable/pro_heart" />
 
                 <TextView
                     android:id="@+id/textView35"
@@ -172,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/call" />
+                    app:srcCompat="@drawable/pro_bill" />
 
                 <TextView
                     android:id="@+id/textView36"
@@ -207,7 +207,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/message" />
+                    app:srcCompat="@drawable/pro_user" />
 
                 <TextView
                     android:id="@+id/textView37"
