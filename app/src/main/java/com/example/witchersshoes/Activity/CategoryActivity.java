@@ -3,11 +3,15 @@ package com.example.witchersshoes.Activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +47,8 @@ public class CategoryActivity extends AppCompatActivity {
         return _bestSeller;
     }
 
+     EditText edtSearchCategories;
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,8 @@ public class CategoryActivity extends AppCompatActivity {
         progressBarCatDetail = findViewById(R.id.progressBarCatDetail);
         titleProCatTxt = findViewById(R.id.titleProCatTxt);
 
+        edtSearchCategories = findViewById(R.id.edtSearchCategories);
+
         // Khởi tạo RecyclerView và LayoutManager
         rcv = findViewById(R.id.category1_recyclerView);
         rcv.setLayoutManager(new GridLayoutManager(this, 2));
@@ -68,9 +76,28 @@ public class CategoryActivity extends AppCompatActivity {
         // Gọi phương thức để tải dữ liệu
         loadBestSeller();
 
+        // Thiết lập TextWatcher cho edtSearchCategories
+        edtSearchCategories.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterProducts(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+
         setVariable();
 
     }
+
 
     public void loadBestSeller() {
         CollectionReference ref = firestore.collection("Products");
@@ -82,27 +109,56 @@ public class CategoryActivity extends AppCompatActivity {
                     return;
                 }
 
-                filterList.clear();
+                category1List.clear(); // Đặt lại danh sách chính
+                filterList.clear();    // Đặt lại danh sách hiển thị
                 String categoryID = getIntent().getStringExtra("id");
                 String title = getIntent().getStringExtra("title");
                 titleProCatTxt.setText(title);
+
                 for (QueryDocumentSnapshot document : snapshot) {
                     try {
                         ProductModel list = document.toObject(ProductModel.class);
-                        String documentId = document.getId();
-                        list.setID(documentId);
-                        Log.d("ProductModel", "Title: " + list.getTitle() + ", Price: " + list.getPrice());
-                        if (categoryID != null && categoryID.equals(documentId)) {
-                            filterList.add(list);
+                        DocumentReference documentCategoryRef = document.getDocumentReference("categoryID");
+
+                        if (documentCategoryRef != null) {
+                            String documentCategoryId = documentCategoryRef.getId();
+                            String documentId = document.getId();
+                            Log.d("category", "Document Category ID: " + documentCategoryId);
+                            list.setID(documentId);
+                            if (categoryID != null && categoryID.equals(documentCategoryId)) {
+                                category1List.add(list); // Thêm vào danh sách chính
+                            }
                         }
                     } catch (Exception e) {
                         Log.e("Data Parsing Error", e.getMessage());
                     }
                 }
+                filterList.addAll(category1List); // Hiển thị toàn bộ danh sách ban đầu
                 bestSellerAdapter.notifyDataSetChanged();
             }
         });
     }
+
+    private void filterProducts(String query) {
+        filterList.clear();
+        if (query.isEmpty()) {
+            filterList.addAll(category1List); // Nếu không có từ khóa, hiển thị tất cả sản phẩm
+        } else {
+            for (ProductModel product : category1List) {
+                if (product.getTitle() != null && product.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                    filterList.add(product);
+                }
+            }
+        }
+
+        if (filterList.isEmpty()) {
+            // Hiển thị thông báo bằng Toast nếu không tìm thấy sản phẩm
+            Toast.makeText(this, "Không tìm thấy sản phẩm phù hợp!", Toast.LENGTH_SHORT).show();
+        }
+        bestSellerAdapter.notifyDataSetChanged();
+    }
+
+
     private void setVariable() {
         backBtn.setOnClickListener(v -> startActivity(new Intent(CategoryActivity.this, MainActivity.class)));
 

@@ -3,6 +3,7 @@
     <style name="Base.Theme.WitchersShoes" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
     </style>
 
     <style name="Theme.WitchersShoes" parent="Base.Theme.WitchersShoes" />
@@ -19,5 +20,16 @@
     <style name="FullCornerImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    
+    <style name="ActivityAni" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_out</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out</item>
     </style>
 </resources>

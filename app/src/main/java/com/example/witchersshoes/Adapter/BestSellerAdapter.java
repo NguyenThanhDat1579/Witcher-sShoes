@@ -176,7 +176,7 @@ public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return Math.min(items.size(), 4);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -14,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -81,21 +82,28 @@ public class MainViewModel extends ViewModel {
 
     public void loadBestSeller() {
         CollectionReference ref = firestore.collection("Products");
-        ref.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        ref.orderBy("createAt", Query.Direction.DESCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot snapshot, FirebaseFirestoreException error) {
                 if (error != null) {
                     Log.e("Firestore Error", error.getMessage());
                     return;
                 }
+
                 List<ProductModel> lists = new ArrayList<>();
+                lists.clear();
                 for (QueryDocumentSnapshot document : snapshot) {
                     try {
                         ProductModel list = document.toObject(ProductModel.class);
                         String documentId = document.getId();
-                        list.setID(documentId);
-                        Log.d("ProductModel", "Title: " + list.getTitle() + ", Price: " + list.getPrice());
-                        lists.add(list);
+                        Boolean invisible = document.getBoolean("invisible");
+                        Double createAt = document.getDouble("createAt");
+                        if(invisible != true) {
+                            list.setID(documentId);
+                            Log.d("ProductModel", "Title: " + list.getTitle() + ", Price: " + list.getPrice());
+                            lists.add(list);
+                        }
                     } catch (Exception e) {
                         Log.e("Data Parsing Error", e.getMessage());
                     }

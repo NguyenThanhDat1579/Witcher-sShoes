@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "WitcherCake"
 include(":app")
- 
+

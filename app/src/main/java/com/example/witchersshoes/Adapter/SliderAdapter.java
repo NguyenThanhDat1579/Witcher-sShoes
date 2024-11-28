@@ -42,7 +42,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
         holder.setImage(sliderModels.get(position), context);
         if (position == sliderModels.size() - 1){
-            viewPager2.post(() -> notifyDataSetChanged());
+            viewPager2.post(() -> viewPager2.setCurrentItem(0, false)); // Lặp lại từ đầu mà không gọi notifyDataSetChanged
         }
     }
 
@@ -60,11 +60,13 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         }
 
         public void setImage(SliderModel sliderModel, Context context) {
-            RequestOptions requestOptions = new RequestOptions().transform(new CenterInside());
+            imageView.setAlpha(0f); // Bắt đầu với alpha 0
             Glide.with(context)
                     .load(sliderModel.getUrl())
-                    .apply(requestOptions)
+                    .apply(new RequestOptions().transform(new CenterInside()))
                     .into(imageView);
+
+            imageView.animate().alpha(1f).setDuration(1000).start(); // Animation fade-in
         }
     }
 }

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/textView5"
@@ -57,6 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="example@gmail.com"
+                    android:maxLines="1"
                     android:background="#F0F5FA"
                     android:layout_marginBottom="10dp" />
 
@@ -91,6 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="●●●●●●●●●●"
+                    android:maxLines="1"
                     android:background="#F0F5FA"
                     android:inputType="textPassword"
                     android:layout_marginBottom="10dp" />
@@ -103,16 +105,17 @@
             android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <CheckBox
                 android:id="@+id/chkGhiNhoTk"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
-                android:text="Ghi nhớ tài khoản"
                 android:button="@null"
                 android:drawableLeft="@drawable/checkbox"
+                android:text="Ghi nhớ tài khoản"
                 android:textColor="#BFC5CB" />
 
             <View
@@ -121,6 +124,7 @@
                 android:layout_weight="1"/>
 
             <TextView
+                android:id="@+id/txtFogotPass"
                 android:gravity="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

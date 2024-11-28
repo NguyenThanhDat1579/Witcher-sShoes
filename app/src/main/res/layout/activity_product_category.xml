@@ -52,6 +52,7 @@
                 android:orientation="vertical">
 
                 <EditText
+                    android:id="@+id/edtSearchCategories"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginStart="24dp"
@@ -59,7 +60,7 @@
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/grey_bg"
-                    android:drawableStart="@drawable/search_icon"
+                    android:drawableEnd="@drawable/search_icon"
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:inputType="text"
