@@ -1,3 +1,4 @@
+// BestSellerAdapter.java
 package com.example.witchersshoes.Adapter;
 
 import android.content.Context;
@@ -26,27 +27,58 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAdapter.ViewHolder> {
-
-    private List<ProductModel> originalItems; // Danh sách gốc
-    private List<ProductModel> filteredItems; // Danh sách hiển thị
+public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductAdapter.ViewHolder> {
+    private List<ProductModel> items;
+    private List<ProductModel> originalItems; // Lưu danh sách gốc để dễ dàng phục hồi khi không tìm kiếm
     private Context context;
     private FirebaseFirestore db;
     private String khachHangID;
     private boolean isFavoriteList;
 
-    public SeeMoreProductAdapter(List<ProductModel> items, boolean isFavoriteList) {
-        this.originalItems = new ArrayList<>(items);
-        this.filteredItems = new ArrayList<>(items);
+    public SearchProductAdapter(List<ProductModel> items) {
+        this.items = items;
+        this.originalItems = new ArrayList<>(items); // Lưu bản sao của danh sách gốc
+        this.isFavoriteList = false;
+        this.db = FirebaseFirestore.getInstance();
+    }
+
+    // Constructor cho màn hình Favorite
+    public SearchProductAdapter(List<ProductModel> items, boolean isFavoriteList) {
+        this.items = items;
+        this.originalItems = new ArrayList<>(items); // Lưu bản sao của danh sách gốc
         this.isFavoriteList = isFavoriteList;
         this.db = FirebaseFirestore.getInstance();
+    }
+
+    public boolean filterList(String query) {
+        List<ProductModel> filteredList = new ArrayList<>();
+
+        // Nếu query không rỗng, lọc theo tên sản phẩm
+        if (query != null && !query.isEmpty()) {
+            for (ProductModel item : items) {
+                if (item.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(item);
+                }
+            }
+        } else {
+            // Nếu query rỗng, hiển thị toàn bộ danh sách
+            filteredList = items;
+        }
+
+        // Cập nhật lại danh sách items với danh sách đã lọc
+        this.items = filteredList;
+
+        // Thông báo cho RecyclerView cập nhật lại dữ liệu
+        notifyDataSetChanged();
+
+        // Trả về true nếu có sản phẩm, false nếu không có sản phẩm nào
+        return !filteredList.isEmpty();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-
         // Lấy khachHangID từ SharedPreferences
         SharedPreferences preferences = context.getSharedPreferences("THONGTIN", Context.MODE_PRIVATE);
         khachHangID = preferences.getString("khachHangID", null);
@@ -59,7 +91,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductModel item = filteredItems.get(position);
+        ProductModel item = items.get(position);
         holder.binding.titleTxt.setText(item.getTitle());
         holder.binding.priceTxt.setText(item.getPrice() + "00₫");
         holder.binding.ratingTxt.setText(String.valueOf(item.getRating()));
@@ -70,20 +102,17 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                 .apply(new RequestOptions().transform(new CenterCrop()))
                 .into(holder.binding.picBestSeller);
 
-        // Kiểm tra trạng thái yêu thích
+        // Kiểm tra trạng thái yêu thích và cập nhật UI
         checkFavoriteStatus(item.getID(), holder);
 
-        // Xử lý sự kiện nút yêu thích
         holder.binding.favoriteBtn.setOnClickListener(v -> {
             if (khachHangID == null) {
-                Toast.makeText(context, "Vui lòng đăng nhập để thêm vào yêu thích",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Vui lòng đăng nhập để thêm vào yêu thích", Toast.LENGTH_SHORT).show();
                 return;
             }
             toggleFavorite(item, holder);
         });
 
-        // Mở chi tiết sản phẩm khi click
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("object", item);
@@ -99,7 +128,11 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                     .document(productId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        holder.binding.favoriteBtn.setSelected(documentSnapshot.exists());
+                        if (documentSnapshot.exists()) {
+                            holder.binding.favoriteBtn.setSelected(true);
+                        } else {
+                            holder.binding.favoriteBtn.setSelected(false);
+                        }
                     });
         }
     }
@@ -108,7 +141,7 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
         String productId = item.getID();
 
         if (holder.binding.favoriteBtn.isSelected()) {
-            // Xóa khỏi danh sách yêu thích
+            // Remove from favorites
             db.collection("KhachHang")
                     .document(khachHangID)
                     .collection("Favorite")
@@ -118,20 +151,18 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                         holder.binding.favoriteBtn.setSelected(false);
                         Toast.makeText(context, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
 
-                        // Gửi sự kiện khi xóa khỏi yêu thích
+                        // Post event khi xóa khỏi yêu thích
                         EventBus.getDefault().post(new FavoriteEvent(productId, false));
 
                         if (isFavoriteList) {
-                            int pos = filteredItems.indexOf(item);
-                            filteredItems.remove(pos);
+                            int pos = items.indexOf(item);
+                            items.remove(pos);
                             notifyItemRemoved(pos);
                         }
                     })
-                    .addOnFailureListener(e -> Toast.makeText(context,
-                            "Lỗi khi xóa khỏi yêu thích: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> Toast.makeText(context, "Lỗi khi xóa khỏi yêu thích: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         } else {
-            // Thêm vào danh sách yêu thích
+            // Add to favorites
             Map<String, Object> favoriteItem = new HashMap<>();
             favoriteItem.put("title", item.getTitle());
             favoriteItem.put("price", item.getPrice());
@@ -148,42 +179,19 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
                         holder.binding.favoriteBtn.setSelected(true);
                         Toast.makeText(context, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
 
-                        // Gửi sự kiện khi thêm vào yêu thích
+                        // Post event khi thêm vào yêu thích
                         EventBus.getDefault().post(new FavoriteEvent(productId, true));
                     })
-                    .addOnFailureListener(e -> Toast.makeText(context,
-                            "Lỗi khi thêm vào yêu thích: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> Toast.makeText(context, "Lỗi khi thêm vào yêu thích: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
-    }
-
-    // **Cập nhật danh sách khi tìm kiếm**
-    public void filter(String query) {
-        filteredItems.clear();
-        if (query.isEmpty()) {
-            filteredItems.addAll(originalItems);
-        } else {
-            for (ProductModel item : originalItems) {
-                if (item.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                    filteredItems.add(item);
-                }
-            }
-        }
-
-        // Thông báo nếu không tìm thấy sản phẩm nào
-        if (filteredItems.isEmpty()) {
-            Toast.makeText(context, "Không tìm thấy sản phẩm phù hợp!", Toast.LENGTH_SHORT).show();
-        }
-
-        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return filteredItems.size();
+        return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ViewholderBestSellerBinding binding;
 
         public ViewHolder(ViewholderBestSellerBinding binding) {
@@ -192,4 +200,3 @@ public class SeeMoreProductAdapter extends RecyclerView.Adapter<SeeMoreProductAd
         }
     }
 }
-

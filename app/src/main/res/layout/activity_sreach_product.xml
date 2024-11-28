@@ -50,30 +50,19 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/edtSearch"
+                <TextView
+                    android:id="@+id/txtText"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:background="@drawable/grey_bg"
-                    android:drawableEnd="@drawable/search_icon"
-                    android:drawablePadding="10dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:hint="Tìm kiếm sản phẩm..."
-                    android:textColor="@color/grey"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:text="Xem coi có không"
+                    android:layout_marginTop="300dp"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/seemoreproduct_recyclerView"
+                        android:id="@+id/seemoreproduct_recyclerView1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:clipToPadding="false"

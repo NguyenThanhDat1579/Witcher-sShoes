@@ -9,12 +9,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Scroller;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,12 +23,10 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.witchersshoes.Adapter.BestSellerAdapter;
 import com.example.witchersshoes.Adapter.CategoryAdapter;
-import com.example.witchersshoes.Adapter.SeeMoreProductAdapter;
 import com.example.witchersshoes.Adapter.SliderAdapter;
 import com.example.witchersshoes.Model.Customer;
 import com.example.witchersshoes.Model.FavoriteEvent;
 import com.example.witchersshoes.Model.SliderModel;
-import com.example.witchersshoes.R;
 import com.example.witchersshoes.ViewModel.MainViewModel;
 import com.example.witchersshoes.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,7 +44,6 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private MainViewModel viewModel = new MainViewModel();
     private boolean isBackPressedOnce = false;
-    TextView txtName;
     private Handler sliderHandler = new Handler();
     private Runnable sliderRunnable;
 
@@ -61,7 +57,7 @@ public class MainActivity extends BaseActivity {
         // Đăng ký EventBus
         EventBus.getDefault().register(this);
 
-        txtName = findViewById(R.id.txtName);
+
         // Lấy dữ liệu tenKhachHang từ Intent
         SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
         String khachHangID = preferences.getString("khachHangID", null);
@@ -78,6 +74,29 @@ public class MainActivity extends BaseActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         View decor = window.getDecorView();
         decor.setSystemUiVisibility(0);
+
+
+
+        binding.btn12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String query = binding.edtSearchMain.getText().toString();
+               if(!query.isEmpty()){
+                   Intent intent = new Intent(MainActivity.this, SearchProductActivity.class);
+                   intent.putExtra("query",query);
+                   startActivity(intent);
+               }else{
+                   Toast.makeText(MainActivity.this, "Vui lòng nhập tên sản phẩm cần tìm kiếm", Toast.LENGTH_SHORT).show();
+               }
+
+            }
+        });
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(binding.edtSearchMain.getWindowToken(), 0);
+
+
+
 
         binding.seemoreproductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,7 +323,7 @@ public class MainActivity extends BaseActivity {
                         customer.setEmail(documentSnapshot.getString("email"));
 
 
-                        txtName.setText(customer.getUsername());
+                        binding.txtName.setText(customer.getUsername());
 
                     }
                 });

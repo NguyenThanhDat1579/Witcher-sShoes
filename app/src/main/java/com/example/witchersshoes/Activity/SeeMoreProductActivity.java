@@ -35,7 +35,6 @@ public class SeeMoreProductActivity extends BaseActivity {
     private ActivitySeeMoreProductBinding binding;
     private MainViewModel viewModel = new MainViewModel();
     ImageView backBtn;
-    EditText edtSearch;
 
 
     @Override
@@ -45,7 +44,6 @@ public class SeeMoreProductActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         backBtn = findViewById(R.id.backBtn);
-        edtSearch = findViewById(R.id.edtSearch);
 
 
         initBestSeller();
@@ -58,7 +56,7 @@ public class SeeMoreProductActivity extends BaseActivity {
         decor.setSystemUiVisibility(0);
 
 
-        edtSearch.addTextChangedListener(new TextWatcher() {
+        binding.edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Không cần xử lý trước khi thay đổi
@@ -66,9 +64,9 @@ public class SeeMoreProductActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Gọi hàm lọc khi văn bản thay đổi
+                // Gọi hàm filter của adapter
                 if (seeMoreProductAdapter != null) {
-                    seeMoreProductAdapter.filter(s.toString());
+                    seeMoreProductAdapter.filter(s.toString()); // Lọc danh sách
                 }
             }
 

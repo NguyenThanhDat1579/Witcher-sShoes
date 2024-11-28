@@ -172,7 +172,7 @@ public class DetailActivity extends BaseActivity {
             }
         });
 
-        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(DetailActivity.this, MainActivity.class)));
+        binding.backBtn.setOnClickListener(v -> finish());
 
         binding.cartBtn.setOnClickListener(v -> {
 
