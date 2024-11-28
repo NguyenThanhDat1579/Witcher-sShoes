@@ -13,6 +13,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.witchersshoes.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class OrderActivity extends AppCompatActivity {
 
     private Button btnContinue;
@@ -33,8 +36,21 @@ public class OrderActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date date = new Date();
+                String title = "Đặt Hàng Thành Công";
+                String message = "Đơn hàng sẽ được giao nhanh nhất có thế, bạn nhé";
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String time = sdf.format(date);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("title", title);
+                bundle.putString("message", message);
+                bundle.putString("time", time);
+
                 Intent i = new Intent(OrderActivity.this, MainActivity.class);
+                Intent intent = new Intent(OrderActivity.this, NotificationActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtras(bundle);
                 startActivity(i);
                 finish();
             }

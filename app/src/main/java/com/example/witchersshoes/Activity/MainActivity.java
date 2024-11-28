@@ -75,8 +75,6 @@ public class MainActivity extends BaseActivity {
         View decor = window.getDecorView();
         decor.setSystemUiVisibility(0);
 
-
-
         binding.btn12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +107,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SeeMoreCategoryActivity.class));
+            }
+        });
+        binding.imgNofication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, NotificationActivity.class));
             }
         });
 
@@ -328,4 +332,5 @@ public class MainActivity extends BaseActivity {
                     }
                 });
     }
+
 }

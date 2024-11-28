@@ -324,15 +324,10 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 // Lấy token giao dịch từ API
                 String token = data.getString("zptranstoken");
                 // Gọi thanh toán qua ZaloPay SDK
-                ZaloPaySDK.getInstance().payOrder(this, token, "http://schemas.android.com/apk/res/android", new PayOrderListener() {
+                ZaloPaySDK.getInstance().payOrder(this, token, "demozpdk://app", new PayOrderListener() {
                     @Override
                     public void onPaymentSucceeded(String transactionId, String transToken, String appTransID) {
-                        runOnUiThread(() -> new AlertDialog.Builder(PaymentDetailActivity.this)
-                                .setTitle("Payment Success")
-                                .setMessage(String.format("TransactionId: %s\nTransToken: %s", transactionId, transToken))
-                                .setPositiveButton("OK", (dialog, which) -> {})
-                                .setNegativeButton("Cancel", null)
-                                .show());
+                        startActivity(new Intent(PaymentDetailActivity.this, OrderActivity.class));
                     }
 
                     @Override
