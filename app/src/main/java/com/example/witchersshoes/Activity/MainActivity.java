@@ -9,15 +9,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.Scroller;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,12 +23,10 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.witchersshoes.Adapter.BestSellerAdapter;
 import com.example.witchersshoes.Adapter.CategoryAdapter;
-import com.example.witchersshoes.Adapter.SeeMoreProductAdapter;
 import com.example.witchersshoes.Adapter.SliderAdapter;
 import com.example.witchersshoes.Model.Customer;
 import com.example.witchersshoes.Model.FavoriteEvent;
 import com.example.witchersshoes.Model.SliderModel;
-import com.example.witchersshoes.R;
 import com.example.witchersshoes.ViewModel.MainViewModel;
 import com.example.witchersshoes.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -81,24 +75,21 @@ public class MainActivity extends BaseActivity {
         View decor = window.getDecorView();
         decor.setSystemUiVisibility(0);
 
-        binding.edtSearchMain.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
-                // Lấy từ khóa tìm kiếm
-                String query = binding.edtSearchMain.getText().toString().trim();
 
-                // Kiểm tra nếu từ khóa không trống
-                if (!query.isEmpty()) {
-                    // Chuyển sang activity tìm kiếm với từ khóa
-                    Intent intent = new Intent(MainActivity.this, SeeMoreProductActivity.class);
-                    intent.putExtra("searchQuery", query);
-                    startActivity(intent);
-                    Toast.makeText(this, "Thành công", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Vui lòng nhập từ khóa tìm kiếm", Toast.LENGTH_SHORT).show();
-                }
-                return true; // Để không cần xử lý thêm
+
+        binding.btn12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String query = binding.edtSearchMain.getText().toString();
+               if(!query.isEmpty()){
+                   Intent intent = new Intent(MainActivity.this, SearchProductActivity.class);
+                   intent.putExtra("query",query);
+                   startActivity(intent);
+               }else{
+                   Toast.makeText(MainActivity.this, "Vui lòng nhập tên sản phẩm cần tìm kiếm", Toast.LENGTH_SHORT).show();
+               }
+
             }
-            return false;
         });
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
