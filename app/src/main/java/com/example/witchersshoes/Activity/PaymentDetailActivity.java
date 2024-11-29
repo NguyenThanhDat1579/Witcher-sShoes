@@ -1,9 +1,7 @@
 package com.example.witchersshoes.Activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -62,6 +60,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private CartAdapter cartAdapter;
     private List<ProductModel> cartItems = new ArrayList<>();
     private double totalFee = 0;
+    private double deliveryFee = 20;
     private RadioButton radioPayment1, radioZaloPay;
     ProgressDialog progressDialog;
 
@@ -293,6 +292,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Lỗi khi đặt hàng: " + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         });
+
     }
 
     private void calculateCartTotal() {
@@ -313,7 +313,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
         CreateOrder orderApi = new CreateOrder();
         try {
             // Lấy tổng tiền từ giao diện
-            String totalAmount = String.format("%.0f", totalFee * 1000);
+            String totalAmount = String.format("%.0f", (totalFee+deliveryFee) * 1000);
             Log.d("ZaloPay", "Data from createOrder: " + totalAmount);
             // Tạo đơn hàng qua API
             JSONObject data = orderApi.createOrder(totalAmount);
