@@ -326,7 +326,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 ZaloPaySDK.getInstance().payOrder(this, token, "demozpdk://app", new PayOrderListener() {
                     @Override
                     public void onPaymentSucceeded(String transactionId, String transToken, String appTransID) {
-                        startActivity(new Intent(PaymentDetailActivity.this, OrderActivity.class));
+                        processCheckout();
                     }
 
                     @Override
