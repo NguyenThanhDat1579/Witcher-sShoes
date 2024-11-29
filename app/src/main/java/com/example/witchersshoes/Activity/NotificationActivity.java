@@ -3,6 +3,7 @@ package com.example.witchersshoes.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationActivity extends AppCompatActivity {
+    private ImageView backBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+
+
+        backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(v -> startActivity(new Intent(NotificationActivity.this, MainActivity.class)));
+
 
         RecyclerView rvNotifications = findViewById(R.id.recyclerViewNotification);
         rvNotifications.setLayoutManager(new LinearLayoutManager(this));
