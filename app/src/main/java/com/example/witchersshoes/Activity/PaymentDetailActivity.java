@@ -57,7 +57,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private RecyclerView paymentDetailView;
     private ImageView backBtn;
     private Button btnOrder;
-    private TextView txtName, txtPhone, txtLocation, totalFeeTxt, taxTxt, deliveryTxt, totalTxt;
+    private TextView txtName, txtPhone, txtLocation, totalFeeTxt, deliveryTxt, totalTxt;
     private PaymentDetailAdapter paymentDetailAdapter;
     private CartAdapter cartAdapter;
     private List<ProductModel> cartItems = new ArrayList<>();
@@ -83,7 +83,6 @@ public class PaymentDetailActivity extends AppCompatActivity {
         txtPhone = findViewById(R.id.txtPhone);
         txtLocation = findViewById(R.id.txtLocation);
         totalFeeTxt = findViewById(R.id.totalFeeTxt);
-        taxTxt = findViewById(R.id.taxTxt);
         deliveryTxt = findViewById(R.id.deliveryTxt);
         totalTxt = findViewById(R.id.totalTxt);
         backBtn = findViewById(R.id.backBtn);
@@ -113,10 +112,9 @@ public class PaymentDetailActivity extends AppCompatActivity {
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(radioPayment1.isChecked()){
+                if (radioPayment1.isChecked()) {
                     processCheckout();
-                }
-                else if(radioZaloPay.isChecked()){
+                } else if (radioZaloPay.isChecked()) {
                     paymentZaloPay();
                 }
             }
@@ -213,9 +211,9 @@ public class PaymentDetailActivity extends AppCompatActivity {
         // Lấy thông tin người dùng hiện tại
         SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
         String khachHangID = preferences.getString("khachHangID", null);
-        String tenKhachHang = preferences.getString("tenKhachHang",null);
-        String diaChi = preferences.getString("diaChi",null);
-        String soDienThoai = preferences.getString("soDienThoai",null);
+        String tenKhachHang = preferences.getString("tenKhachHang", null);
+        String diaChi = preferences.getString("diaChi", null);
+        String soDienThoai = preferences.getString("soDienThoai", null);
 
         if (khachHangID == null) {
             Toast.makeText(this, "Vui lòng đăng nhập để thanh toán", Toast.LENGTH_SHORT).show();
@@ -240,6 +238,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
             // Tạo danh sách các sản phẩm
             List<Map<String, Object>> products = new ArrayList<>();
             double totalAmount = 0;
+            double totalDelivery = 20;
 
             // Thêm từng sản phẩm vào danh sách
             for (ProductModel cartItem : cartItems) {
@@ -259,13 +258,13 @@ public class PaymentDetailActivity extends AppCompatActivity {
             // Thêm thông tin vào đơn hàng
             orderData.put("products", products);  // Danh sách sản phẩm
             orderData.put("totalAmount", totalAmount);  // Tổng tiền
+            orderData.put("totalDelivery", totalDelivery);  // Tổng tiền giao hàng
             orderData.put("createdAt", new Timestamp(new Date()));  // Thời gian tạo
             orderData.put("status", "Chờ xác nhận");  // Trạng thái đơn hàng
             orderData.put("customerID", khachHangID);  // ID khách hàng
-            orderData.put("customerName",tenKhachHang);
-            orderData.put("customerPhone",soDienThoai);
-            orderData.put("customerAddress",diaChi);
-
+            orderData.put("customerName", tenKhachHang);
+            orderData.put("customerPhone", soDienThoai);
+            orderData.put("customerAddress", diaChi);
 
 
             // Tạo một document mới trong collection Orders
@@ -302,14 +301,14 @@ public class PaymentDetailActivity extends AppCompatActivity {
             totalFee += item.getPrice() * item.getNumberInCart();
         }
 
-            double tax = totalFee * 0.1; // Thuế 10%
-            double deliveryFee = 20; // Phí vận chuyển cố định
 
-            totalFeeTxt.setText(totalFee+"00₫");
-            taxTxt.setText(tax+"00₫");
-            deliveryTxt.setText(deliveryFee+"00₫");
-            totalTxt.setText((totalFee + tax + deliveryFee)+"00₫");
-        }
+        double deliveryFee = 20; // Phí vận chuyển cố định
+
+        totalFeeTxt.setText(String.format("%,.0f₫", totalFee * 1000));
+        deliveryTxt.setText(String.format("%,.0f₫", deliveryFee * 1000));
+        totalTxt.setText(String.format("%,.0f₫", (totalFee + deliveryFee) * 1000));
+    }
+
     private void paymentZaloPay() {
         CreateOrder orderApi = new CreateOrder();
         try {

@@ -29,7 +29,7 @@ public class CartActivity extends AppCompatActivity {
     private RecyclerView cartView;
     private ImageView backBtn;
     private Button btnPayment;
-    private TextView totalFeeTxt, taxTxt, deliveryTxt, totalTxt;
+    private TextView totalFeeTxt, deliveryTxt, totalTxt;
     private CartAdapter cartAdapter;
     private List<ProductModel> cartItems = new ArrayList<>();
     private double totalFee = 0;
@@ -42,7 +42,6 @@ public class CartActivity extends AppCompatActivity {
         // Ánh xạ view
         cartView = findViewById(R.id.cartView);
         totalFeeTxt = findViewById(R.id.totalFeeTxt);
-        taxTxt = findViewById(R.id.taxTxt);
         deliveryTxt = findViewById(R.id.deliveryTxt);
         totalTxt = findViewById(R.id.totalTxt);
         backBtn = findViewById(R.id.backBtn);
@@ -134,9 +133,7 @@ public class CartActivity extends AppCompatActivity {
             findViewById(R.id.discountBtn).setVisibility(View.GONE);
             findViewById(R.id.totalFeeText).setVisibility(View.GONE);
             findViewById(R.id.deliveryText).setVisibility(View.GONE);
-            findViewById(R.id.taxText).setVisibility(View.GONE);
             findViewById(R.id.deliveryTxt).setVisibility(View.GONE);
-            findViewById(R.id.taxTxt).setVisibility(View.GONE);
             findViewById(R.id.totalFeeTxt).setVisibility(View.GONE);
             findViewById(R.id.view).setVisibility(View.GONE);
             findViewById(R.id.totalText).setVisibility(View.GONE);
@@ -151,9 +148,7 @@ public class CartActivity extends AppCompatActivity {
             findViewById(R.id.discountBtn).setVisibility(View.VISIBLE);
             findViewById(R.id.totalFeeText).setVisibility(View.VISIBLE);
             findViewById(R.id.deliveryText).setVisibility(View.VISIBLE);
-            findViewById(R.id.taxText).setVisibility(View.VISIBLE);
             findViewById(R.id.deliveryTxt).setVisibility(View.VISIBLE);
-            findViewById(R.id.taxTxt).setVisibility(View.VISIBLE);
             findViewById(R.id.totalFeeTxt).setVisibility(View.VISIBLE);
             findViewById(R.id.view).setVisibility(View.VISIBLE);
             findViewById(R.id.totalText).setVisibility(View.VISIBLE);
@@ -168,14 +163,13 @@ public class CartActivity extends AppCompatActivity {
             totalFee += item.getPrice() * item.getNumberInCart();
         }
 
-        double tax = totalFee * 0.1; // Thuế 10%
-        String formattedTax = String.format("%.1f", tax);
-        formattedTax = formattedTax.replace(",", ".");
+
+
         double deliveryFee = 20; // Phí vận chuyển cố định
 
-        totalFeeTxt.setText(totalFee+"00₫");
-        taxTxt.setText(formattedTax+"00₫");
-        deliveryTxt.setText(deliveryFee+"00₫");
-        totalTxt.setText((totalFee + tax + deliveryFee)+"00₫");
+        totalFeeTxt.setText(String.format("%,.0f₫", totalFee * 1000));
+
+        deliveryTxt.setText(String.format("%,.0f₫", deliveryFee * 1000));
+        totalTxt.setText(String.format("%,.0f₫", (totalFee + deliveryFee) * 1000));
     }
 }

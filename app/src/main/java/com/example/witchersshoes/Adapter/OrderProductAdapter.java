@@ -56,7 +56,7 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
         holder.titleTxt.setText(item.getProductName());
         holder.feeEachItem.setText(item.getPrice()+"00₫");
         holder.numberItemTxt.setText("x" + String.valueOf(item.getQuantity()));
-        holder.totalEachItem.setText((Float.parseFloat(item.getPrice()) * item.getQuantity())+"00₫");
+        holder.totalEachItem.setText(String.format("%,.0f₫", Double.parseDouble(item.getPrice()) * item.getQuantity() * 1000));
 
         // Load ảnh sản phẩm bằng Glide
         Glide.with(context).load(item.getImage()).into(holder.picCart);

@@ -55,7 +55,7 @@ public class PaymentDetailAdapter extends RecyclerView.Adapter<PaymentDetailAdap
         holder.titleTxt.setText(item.getTitle());
         holder.feeEachItem.setText(item.getPrice()+"00₫");
         holder.numberItemTxt.setText("x" + String.valueOf(item.getNumberInCart()));
-        holder.totalEachItem.setText((item.getPrice() * item.getNumberInCart())+"00₫");
+        holder.totalEachItem.setText(String.format("%,.0f₫", (item.getPrice() * item.getNumberInCart()) * 1000));
 
         // Load ảnh sản phẩm bằng Glide
         Glide.with(context).load(item.getPicUrl().get(0)).into(holder.picCart);

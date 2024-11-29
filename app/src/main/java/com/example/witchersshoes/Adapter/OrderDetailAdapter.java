@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,7 +44,12 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
 //        holder.tvOrderId.setText("Đơn hàng #" + order.getOrderID());
         holder.tvDate.setText(dateStr);
         holder.tvStatus.setText(order.getStatus());
-        holder.tvTotal.setText(String.format("%,.0f đ", order.getTotalAmount() * 1000));
+        if (order.getStatus().equals("Chờ xác nhận")) {
+            holder.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.red)); // Màu đỏ
+        } else if (order.getStatus().equals("Đã xác nhận")) {
+            holder.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.green)); // Màu xanh lá
+        }
+        holder.tvTotal.setText(String.format("%,.0f đ", (order.getTotalAmount() + 20) * 1000));
 
         // Set up RecyclerView for products in this order
         OrderProductAdapter productAdapter = new OrderProductAdapter(context, order.getProducts());

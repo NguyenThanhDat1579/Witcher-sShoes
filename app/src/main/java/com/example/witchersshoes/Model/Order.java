@@ -9,6 +9,7 @@ public class Order {
     private Date createdAt;
     private String status;
     private double totalAmount;
+    private double totalDelivery;
     private String customerName;
     private String customerAddress;
     private String customerPhone;
@@ -81,5 +82,13 @@ public class Order {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public double getTotalDelivery() {
+        return totalDelivery;
+    }
+
+    public void setTotalDelivery(double totalDelivery) {
+        this.totalDelivery = totalDelivery;
     }
 }

@@ -264,16 +264,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/totalFeeText" />
 
-                <TextView
-                    android:id="@+id/taxText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Tổng thuế"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/deliveryText" />
 
                 <View
                     android:id="@+id/view"
@@ -284,7 +274,7 @@
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/taxText" />
+                    app:layout_constraintTop_toBottomOf="@+id/deliveryText" />
 
                 <TextView
                     android:id="@+id/totalText"
@@ -309,16 +299,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/totalText" />
 
-                <TextView
-                    android:id="@+id/taxTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="$-"
-                    android:textColor="@color/brown"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/taxText"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/taxText" />
 
                 <TextView
                     android:id="@+id/deliveryTxt"

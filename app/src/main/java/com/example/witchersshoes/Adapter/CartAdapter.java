@@ -134,7 +134,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                             // Cập nhật UI sau khi update thành công
                             item.setNumberInCart(newQuantity);
                             holder.numberItemTxt.setText(String.valueOf(newQuantity));
-                            holder.totalEachItem.setText((item.getPrice() * newQuantity)+"00₫");
+                            holder.totalEachItem.setText(String.format("%,.0f₫", item.getPrice() * newQuantity * 1000  ));
                             cartUpdateListener.onCartUpdated();
 
                             // Thông báo thành công (tùy chọn)
