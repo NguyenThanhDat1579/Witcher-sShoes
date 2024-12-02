@@ -62,27 +62,9 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/bell" />
 
-                    <ImageView
-                        android:id="@+id/imgNofiCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toTopOf="@+id/imgNofication"
-                        app:layout_constraintEnd_toEndOf="@+id/imgNofication"
-                        app:layout_constraintStart_toEndOf="@+id/imgNofication"
-                        app:layout_constraintTop_toTopOf="@+id/imgNofication"
-                        app:srcCompat="@drawable/red_circle" />
 
-                    <TextView
-                        android:id="@+id/txtNofiCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/imgNofiCount"
-                        app:layout_constraintEnd_toEndOf="@+id/imgNofiCount"
-                        app:layout_constraintStart_toStartOf="@+id/imgNofiCount"
-                        app:layout_constraintTop_toTopOf="@+id/imgNofiCount" />
+
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
