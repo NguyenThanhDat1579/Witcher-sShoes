@@ -9,14 +9,16 @@ public class Customer {
     private String password;
     private String phone;
     private String address;
+    private Boolean isAdmin;
 
-    public Customer(String id, String email, String username, String password, String phone, String address) {
+    public Customer(String id, String email, String username, String password, String phone, String address, Boolean isAdmin) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.isAdmin = isAdmin;
     }
 
     public Customer() {
@@ -66,8 +68,17 @@ public class Customer {
         return address;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
 
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
 
     public HashMap<String, Object> convertHashMap() {
         HashMap<String, Object> map = new HashMap<>();
@@ -77,6 +88,7 @@ public class Customer {
         map.put("matKhau", password);
         map.put("soDienThoai",phone);
         map.put("diaChi",address);
+        map.put("isAdmin",isAdmin);
         return map;
     }
 }

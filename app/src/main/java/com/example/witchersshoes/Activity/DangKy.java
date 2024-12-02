@@ -63,6 +63,7 @@ public class DangKy extends AppCompatActivity {
         String address = edtAddress.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
         String rePassword = edtRePassword.getText().toString().trim();
+        Boolean isAdmin = false;
 
 
         // Kiểm tra
@@ -137,7 +138,7 @@ public class DangKy extends AppCompatActivity {
 
 
 
-            Customer customer = new Customer(id,  email, username, password, phone, address);
+            Customer customer = new Customer(id,  email, username, password, phone, address, isAdmin);
             HashMap<String, Object> customers = customer.convertHashMap();
             //push du lieu len
             db.collection("KhachHang").document(id)

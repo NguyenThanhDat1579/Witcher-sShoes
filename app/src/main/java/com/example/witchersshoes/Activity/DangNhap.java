@@ -134,41 +134,47 @@ public class DangNhap extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     // Ẩn dialog khi có kết quả
                     progressDialog.dismiss();
-                    if (!queryDocumentSnapshots.isEmpty()) {
+                    if (!queryDocumentSnapshots.isEmpty() ) {
                         for (DocumentSnapshot document : queryDocumentSnapshots) {
                             // Lấy trường 'tenKhachHang' từ tài liệu
                             String tenKhachHang = document.getString("tenKhachHang");
                             String id = document.getId(); // Lấy ID khách hàng từ Firestore
                             String diaChi = document.getString("diaChi");
                             String soDienThoai = document.getString("soDienThoai");
+                            Boolean isAdmin = document.getBoolean("isAdmin");
 
-                            // Lưu thông tin đăng nhập vào SharedPreferences nếu checkbox được chọn
-                            SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
+                            if(!isAdmin) {
 
-                            // Lưu thông tin đăng nhập
-                            if (chkGhiNhoTk.isChecked()) {
-                                editor.putBoolean("isRemember", true);
-                                editor.putString("email", username);
-                                editor.putString("password", password);
-                            } else {
-                                editor.putBoolean("isRemember", false);
-                                editor.remove("email");
-                                editor.remove("password");
-                            }
-                            editor.putString("khachHangID", id); // Lưu ID khách hàng
-                            editor.putString("tenKhachHang",tenKhachHang);
-                            editor.putString("diaChi",diaChi);
-                            editor.putString("soDienThoai",soDienThoai);
+                                // Lưu thông tin đăng nhập vào SharedPreferences nếu checkbox được chọn
+                                SharedPreferences preferences = getSharedPreferences("THONGTIN", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+
+                                // Lưu thông tin đăng nhập
+                                if (chkGhiNhoTk.isChecked()) {
+                                    editor.putBoolean("isRemember", true);
+                                    editor.putString("email", username);
+                                    editor.putString("password", password);
+                                } else {
+                                    editor.putBoolean("isRemember", false);
+                                    editor.remove("email");
+                                    editor.remove("password");
+                                }
+                                editor.putString("khachHangID", id); // Lưu ID khách hàng
+                                editor.putString("tenKhachHang", tenKhachHang);
+                                editor.putString("diaChi", diaChi);
+                                editor.putString("soDienThoai", soDienThoai);
 //                            Toast.makeText(this, "khachHangID: "+ id, Toast.LENGTH_SHORT).show();
-                            editor.apply();
+                                editor.apply();
 
 
-                            Intent intent = new Intent(DangNhap.this, MainActivity.class);
-                            intent.putExtra("tenKhachHang", tenKhachHang);
-                            intent.putExtra("khachHangID", id);
-                            intent.putExtra("email", username);
-                            startActivity(intent);
+                                Intent intent = new Intent(DangNhap.this, MainActivity.class);
+                                intent.putExtra("tenKhachHang", tenKhachHang);
+                                intent.putExtra("khachHangID", id);
+                                intent.putExtra("email", username);
+                                startActivity(intent);
+                            }else {
+                                Toast.makeText(this, "Bạn không có quyền truy cập vào trang này", Toast.LENGTH_SHORT).show();
+                            }
 
                         }
                     } else {
