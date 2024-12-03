@@ -236,7 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:background="#F6F6F6"
-                android:text="Log out"
+                android:text="Đăng xuất"
                 android:textColor="#808080"
                 android:textSize="15dp"
                 app:backgroundTint="@null" />
