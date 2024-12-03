@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -197,7 +198,7 @@ public class DangNhap extends AppCompatActivity {
         emailFogotInputLayout = dialog.findViewById(R.id.emailFogotInputLayout);
         Button btn = dialog.findViewById(R.id.btn);
         // Ánh xạ nút btnClose
-        Button btnClose = dialog.findViewById(R.id.btnClose);
+        ImageView btnClose = dialog.findViewById(R.id.btnClose);
 
         // Set sự kiện OnClickListener
         btnClose.setOnClickListener(v -> {

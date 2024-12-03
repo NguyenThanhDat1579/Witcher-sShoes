@@ -208,7 +208,6 @@
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     android:background="@drawable/grey_bg_circle"
-                    android:elevation="20dp"
                     android:padding="10dp"
                     app:srcCompat="@drawable/basket" />
             </LinearLayout>
