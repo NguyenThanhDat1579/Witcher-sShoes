@@ -111,7 +111,7 @@
                     android:id="@+id/edtPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="example@gmail.com"
+                    android:hint="0986251456"
                     android:background="#F0F5FA"
                     android:layout_marginBottom="10dp"/>
             </com.google.android.material.textfield.TextInputLayout>

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,8 +81,16 @@ public class DangNhap extends AppCompatActivity {
             }
             if (!email.isEmpty() && !password.isEmpty()) {
                 checkLogin(email, password);
+            }
+
+            if (password.isEmpty()) {
+                passInputLayout.setError("Mật khẩu không được để trống");
+                isValid = false;
             } else {
-                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                passInputLayout.setError(null);
+            }
+            if (!email.isEmpty() && !password.isEmpty()) {
+                checkLogin(email, password);
             }
         });
 
@@ -191,7 +200,7 @@ public class DangNhap extends AppCompatActivity {
         emailFogotInputLayout = dialog.findViewById(R.id.emailFogotInputLayout);
         Button btn = dialog.findViewById(R.id.btn);
         // Ánh xạ nút btnClose
-        Button btnClose = dialog.findViewById(R.id.btnClose);
+        ImageView btnClose = dialog.findViewById(R.id.btnClose);
 
         // Set sự kiện OnClickListener
         btnClose.setOnClickListener(v -> {

@@ -87,15 +87,18 @@ public class DangKy extends AppCompatActivity {
             emailInputLayout.setError(null); // Xóa lỗi nếu email hợp lệ
         }
 
-        // Kiểm tra Phone
         if (phone.isEmpty()) {
             phoneInputLayout.setError("Số điện thoại không được để trống");
             isValid = false;
-        } else if (!Patterns.PHONE.matcher(phone).matches()) {
+        } else if (!Patterns.PHONE.matcher(phone).matches() || phone.length() < 10 || phone.length() > 11) {
             phoneInputLayout.setError("Số điện thoại không hợp lệ");
             isValid = false;
+        } else if (!phone.startsWith("03") && !phone.startsWith("07") && !phone.startsWith("08")
+                && !phone.startsWith("09") && !phone.startsWith("01")) {
+            phoneInputLayout.setError("Số điện thoại không đúng đầu số nhà mạng");
+            isValid = false;
         } else {
-            phoneInputLayout.setError(null); // Xóa lỗi nếu email hợp lệ
+            phoneInputLayout.setError(null); // Xóa lỗi nếu hợp lệ
         }
 
         // Kiểm tra Address
@@ -116,7 +119,7 @@ public class DangKy extends AppCompatActivity {
         // Kiểm tra lại mật khẩu
 
         if (rePassword.isEmpty()) {
-            rePassInputLayout.setError("Vui lòng nhập nhập lại mật khẩu");
+            rePassInputLayout.setError("Vui lòng nhập lại mật khẩu");
             isValid = false;
         } else if (!password.equals(rePassword)) {
             rePassInputLayout.setError("Mật khẩu không trùng khớp");
@@ -146,7 +149,7 @@ public class DangKy extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void unused) {
                             progressDialog.dismiss(); // Tắt loading khi thành công
-                            Toast.makeText(DangKy.this, "thanh cong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DangKy.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(DangKy.this, DangNhap.class);
                             startActivity(intent);
                             finishAffinity();
