@@ -1,8 +1,9 @@
 {
   "project_info": {
     "project_number": "282834722292",
+    "firebase_url": "https://witcher-sshoes-default-rtdb.firebaseio.com",
     "project_id": "witcher-sshoes",
-    "storage_bucket": "witcher-sshoes.appspot.com"
+    "storage_bucket": "witcher-sshoes.firebasestorage.app"
   },
   "client": [
     {
