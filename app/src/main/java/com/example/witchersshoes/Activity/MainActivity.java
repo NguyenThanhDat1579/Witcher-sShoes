@@ -125,6 +125,10 @@ public class MainActivity extends BaseActivity {
         String khachHangID = preferences.getString("khachHangID", null);
 
         getInfoUser(khachHangID);
+
+        
+        initCategory();
+        initBestSeller();
     }
 
     @Override
